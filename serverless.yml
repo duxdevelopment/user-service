@@ -1,0 +1,71 @@
+service: payment-service
+
+package:
+  individually: true
+  exclude:
+    - ./logo.png
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  profile: phalt
+  stage: dev
+  region: ap-southeast-2
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+    packager: 'yarn' # Packager that will be used to package your external modules
+    excludeFiles: src/**/*.test.[t|j]s # Exclude test files
+  # warmup:
+  #   enabled: true
+  #   events:
+  #     - schedule: rate(5 minutes)
+  #   prewarm: true
+  #   concurrency: 1
+  prune:
+    automatic: true
+    number: 5 # Number of versions to keep
+  environment:
+    TRANSACTIONS_TABLE: 'arn:aws:dynamodb:ap-southeast-2:457286094131:table/TRANSACTIONS'
+    AUTH_ARN: arn:aws:cognito-idp:ap-southeast-2:457286094131:userpool/ap-southeast-2_G3sdlJ96i
+
+functions:
+  createTransaction:
+    handler: src/handlers/createTransaction.default
+    events:
+      - http:
+          path: create
+          method: post
+          cors: true
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:PutItem
+          - dynamodb:CreateTable
+        Resource: ${self:custom.environment.TRANSACTIONS_TABLE}
+  getTransactionsByUser:
+    handler: src/handlers/getTransactionsByUser.default
+    events:
+      - http:
+          path: transactions/{userId}
+          method: get
+          cors: true
+          # authorizer:
+          #   arn: ${self:custom.environment.AUTH_ARN}
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:Query
+          - dynamodb:GetItem
+          - dynamodb:CreateTable
+        Resource: ${self:custom.environment.TRANSACTIONS_TABLE}/index/userIndex
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-plugin-warmup
+  - serverless-dotenv-plugin
+  - serverless-prune-plugin
+  - serverless-iam-roles-per-function
