@@ -2,8 +2,10 @@ import { successResponse, runWarm, errorResponse } from '../utils';
 import { Response } from '../utils/lambda-response';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../database/schema';
-import { Auth } from 'aws-amplify';
+import { Auth, Amplify } from 'aws-amplify';
+import awsmobile from '../aws-exports';
 
+Amplify.configure(awsmobile);
 interface userInterface {
   firstName: string;
   lastName: string;
@@ -33,8 +35,8 @@ const registerUser = async (
         username: email,
         password,
         attributes: {
+          name: `${firstName} ${lastName}`,
           email,
-          phoneNumber,
         },
       });
 
