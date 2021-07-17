@@ -1,4 +1,4 @@
-service: payment-service
+service: user-service
 
 package:
   individually: true
@@ -18,6 +18,9 @@ custom:
     includeModules: true
     packager: 'yarn' # Packager that will be used to package your external modules
     excludeFiles: src/**/*.test.[t|j]s # Exclude test files
+  amplify:
+    - filename: src/aws-exports.js
+      type: javascript
   # warmup:
   #   enabled: true
   #   events:
@@ -28,15 +31,15 @@ custom:
     automatic: true
     number: 5 # Number of versions to keep
   environment:
-    TRANSACTIONS_TABLE: 'arn:aws:dynamodb:ap-southeast-2:457286094131:table/TRANSACTIONS'
+    USER_TABLE: 'arn:aws:dynamodb:ap-southeast-2:457286094131:table/USERS'
     AUTH_ARN: arn:aws:cognito-idp:ap-southeast-2:457286094131:userpool/ap-southeast-2_G3sdlJ96i
 
 functions:
-  createTransaction:
-    handler: src/handlers/createTransaction.default
+  registerUser:
+    handler: src/handlers/registerUser.default
     events:
       - http:
-          path: create
+          path: register
           method: post
           cors: true
     iamRoleStatements:
@@ -44,7 +47,7 @@ functions:
         Action:
           - dynamodb:PutItem
           - dynamodb:CreateTable
-        Resource: ${self:custom.environment.TRANSACTIONS_TABLE}
+        Resource: ${self:custom.environment.USER_TABLE}
   getTransactionsByUser:
     handler: src/handlers/getTransactionsByUser.default
     events:
@@ -60,7 +63,7 @@ functions:
           - dynamodb:Query
           - dynamodb:GetItem
           - dynamodb:CreateTable
-        Resource: ${self:custom.environment.TRANSACTIONS_TABLE}/index/userIndex
+        Resource: ${self:custom.environment.USER_TABLE}/index/userIndex
 
 plugins:
   - serverless-webpack
@@ -69,3 +72,4 @@ plugins:
   - serverless-dotenv-plugin
   - serverless-prune-plugin
   - serverless-iam-roles-per-function
+  - aws-amplify-serverless-plugin

@@ -26,4 +26,4 @@ const userSchema = new Schema(
   }
 );
 
-export const Transaction = dynamoose.model('USERS', userSchema, ddbOptions);
+export const User = dynamoose.model('USERS', userSchema, ddbOptions);

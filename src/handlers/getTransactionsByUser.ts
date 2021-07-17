@@ -1,6 +1,6 @@
 import { successResponse, runWarm, errorResponse } from '../utils';
 import { Response } from '../utils/lambda-response';
-import { Transaction } from '../database/schema';
+import { User } from '../database/schema';
 
 const getTransactionsByUser = async (
   event: AWSLambda.APIGatewayEvent
@@ -11,7 +11,7 @@ const getTransactionsByUser = async (
     if (event.pathParameters) {
       const { userId } = event.pathParameters;
       console.log(userId);
-      const result = await Transaction.query('userId').eq(userId).exec();
+      const result = await User.query('userId').eq(userId).exec();
       const response = successResponse({
         transactions: result,
       });
