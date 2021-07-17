@@ -1,18 +1,22 @@
 import dynamoose, { Schema } from 'dynamoose';
 import { ddbOptions } from './settings';
 
-const transactionSchema = new Schema(
+const userSchema = new Schema(
   {
-    transactionId: {
+    userId: {
       type: String,
       hashKey: true,
     },
-    price: Number,
-    currency: String,
-    userId: {
+    email: String,
+    firstName: String,
+    lastName: String,
+    isActive: Boolean,
+    DOB: String,
+    phoneNumber: String,
+    cognitoId: {
       type: String,
       index: {
-        name: 'userIndex',
+        name: 'cognitoIndex',
         global: true,
       },
     },
@@ -22,8 +26,4 @@ const transactionSchema = new Schema(
   }
 );
 
-export const Transaction = dynamoose.model(
-  'TRANSACTIONS',
-  transactionSchema,
-  ddbOptions
-);
+export const Transaction = dynamoose.model('USERS', userSchema, ddbOptions);
