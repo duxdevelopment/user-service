@@ -10,9 +10,10 @@ const userSchema = new Schema(
     email: String,
     firstName: String,
     lastName: String,
-    isActive: Boolean,
-    DOB: String,
-    phoneNumber: String,
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
     cognitoId: {
       type: String,
       index: {
