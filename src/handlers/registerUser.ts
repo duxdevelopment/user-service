@@ -3,7 +3,7 @@ import { Response } from '../utils/lambda-response';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../database/schema';
 import { Auth, Amplify } from 'aws-amplify';
-import awsmobile from '../aws-exports';
+import awsmobile from '../amplifyConfig';
 
 Amplify.configure(awsmobile);
 interface userInterface {

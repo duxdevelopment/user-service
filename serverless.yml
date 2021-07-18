@@ -74,4 +74,3 @@ plugins:
   - serverless-dotenv-plugin
   - serverless-prune-plugin
   - serverless-iam-roles-per-function
-  - aws-amplify-serverless-plugin
