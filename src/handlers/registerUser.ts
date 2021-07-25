@@ -4,6 +4,7 @@ import {
   corsSuccessResponse,
   Response,
 } from '../utils/lambda-response';
+import { checkEmail } from './getUserByEmail';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../database/schema';
 import { Auth, Amplify } from 'aws-amplify';
@@ -27,25 +28,36 @@ const registerUser = async (
       event.body
     );
 
+    const exists = await checkEmail(email);
+
+    if (exists) {
+      return corsErrorResponse({
+        message: 'user already exists',
+      });
+    }
+
     try {
-      const { userSub } = await Auth.signUp({
+      const uid = uuidv4();
+      const userDoc = new User({
+        userId: uid,
+        firstName,
+        lastName,
+        email,
+      });
+
+      await userDoc.save();
+
+      const signUp = await Auth.signUp({
         username: email,
         password,
         attributes: {
           name: `${firstName} ${lastName}`,
           email,
+          'custom:userId': uid,
         },
       });
 
-      const userDoc = new User({
-        userId: uuidv4(),
-        firstName,
-        lastName,
-        email,
-        cognitoId: userSub,
-      });
-
-      await userDoc.save();
+      console.log(signUp);
 
       return corsSuccessResponse({
         message: 'User created',

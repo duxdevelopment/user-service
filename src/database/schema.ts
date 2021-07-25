@@ -7,19 +7,18 @@ const userSchema = new Schema(
       type: String,
       hashKey: true,
     },
-    email: String,
+    email: {
+      type: String,
+      index: {
+        name: 'emailIndex',
+        global: true,
+      },
+    },
     firstName: String,
     lastName: String,
     isActive: {
       type: Boolean,
       default: true,
-    },
-    cognitoId: {
-      type: String,
-      index: {
-        name: 'cognitoIndex',
-        global: true,
-      },
     },
   },
   {
