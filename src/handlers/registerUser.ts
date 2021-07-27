@@ -7,6 +7,7 @@ import {
 import { checkEmail } from './getUserByEmail';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../database/schema';
+import { createStripeUser } from './createStripeUser';
 import { Auth, Amplify } from 'aws-amplify';
 import awsmobile from '../amplifyConfig';
 
@@ -38,11 +39,14 @@ const registerUser = async (
 
     try {
       const uid = uuidv4();
+
+      const { id } = await createStripeUser({ firstName, lastName, email });
       const userDoc = new User({
         userId: uid,
         firstName,
         lastName,
         email,
+        stripeId: id,
       });
 
       await userDoc.save();

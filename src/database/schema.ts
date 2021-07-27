@@ -14,6 +14,13 @@ const userSchema = new Schema(
         global: true,
       },
     },
+    stripeId: {
+      type: String,
+      index: {
+        name: 'stripeIndex',
+        global: true,
+      },
+    },
     firstName: String,
     lastName: String,
     isActive: {

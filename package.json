@@ -5,8 +5,8 @@
   "scripts": {
     "deploy:env": "sls deploy --force --stage $NODE_ENV",
     "deploy": "export NODE_ENV=dev && yarn deploy:env",
-    "deploy:production": "export NODE_ENV=production && yarn deploy:env",
-    "deploy:stage": "export NODE_ENV=stage && yarn deploy:env",
+    "deploy:production": "export NODE_ENV=prod && yarn deploy:env",
+    "deploy:staging": "export NODE_ENV=staging && yarn deploy:env",
     "lint": "eslint src --ext ts,js --no-ignore --fix",
     "serve": "AWS_PROFILE=phalt sls offline -P 4000",
     "serve:watch": "nodemon -e js,ts,jsx,tsx -x yarn serve",
@@ -54,10 +54,12 @@
     ]
   },
   "dependencies": {
+    "@types/stripe": "^8.0.417",
     "@types/uuid": "^8.3.1",
     "aws-amplify": "^4.2.0",
     "aws-sdk": "^2.948.0",
     "dynamoose": "^2.7.3",
+    "stripe": "^8.165.0",
     "uuid": "^8.3.2"
   }
 }
