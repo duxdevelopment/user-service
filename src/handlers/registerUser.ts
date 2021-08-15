@@ -17,6 +17,7 @@ interface userInterface {
   lastName: string;
   email: string;
   password: string;
+  phoneNumber: string;
 }
 
 const registerUser = async (
@@ -25,9 +26,13 @@ const registerUser = async (
   console.log(event);
 
   if (event.body) {
-    const { firstName, lastName, email, password }: userInterface = JSON.parse(
-      event.body
-    );
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      phoneNumber,
+    }: userInterface = JSON.parse(event.body);
 
     const exists = await checkEmail(email);
 
@@ -47,6 +52,7 @@ const registerUser = async (
         lastName,
         email,
         stripeId: id,
+        phoneNumber,
       });
 
       await userDoc.save();

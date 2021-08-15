@@ -4,8 +4,8 @@
   "license": "MIT",
   "scripts": {
     "deploy:env": "sls deploy --force --stage $NODE_ENV",
-    "deploy": "export NODE_ENV=dev && yarn deploy:env",
-    "deploy:production": "export NODE_ENV=prod && yarn deploy:env",
+    "deploy": "AWS_PROFILE=phalt export NODE_ENV=dev && yarn deploy:env",
+    "deploy:prod": "export NODE_ENV=prod && yarn deploy:env",
     "deploy:staging": "export NODE_ENV=staging && yarn deploy:env",
     "lint": "eslint src --ext ts,js --no-ignore --fix",
     "serve": "AWS_PROFILE=phalt sls offline -P 4000",

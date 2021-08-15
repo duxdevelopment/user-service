@@ -49,6 +49,16 @@ functions:
         Action:
           - dynamodb:PutItem
           - dynamodb:CreateTable
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
+  notifyUserPlateRecognition:
+    handler: src/handlers/registerUser.default
+    events:
+      - sns: notify-user-plate-recognition-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:Query
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
   # getTransactionsByUser:
   #   handler: src/handlers/getTransactionsByUser.default
