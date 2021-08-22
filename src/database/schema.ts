@@ -23,6 +23,7 @@ const userSchema = new Schema(
     },
     firstName: String,
     lastName: String,
+    phoneNumber: String,
     isActive: {
       type: Boolean,
       default: true,
