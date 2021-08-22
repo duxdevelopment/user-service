@@ -1,10 +1,5 @@
 service: user-service
 
-package:
-  individually: true
-  exclude:
-    - ./logo.png
-
 provider:
   name: aws
   runtime: nodejs12.x
@@ -60,22 +55,15 @@ functions:
         Action:
           - dynamodb:Query
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
-  # getTransactionsByUser:
-  #   handler: src/handlers/getTransactionsByUser.default
-  #   events:
-  #     - http:
-  #         path: transactions/{userId}
-  #         method: get
-  #         cors: true
-  #         # authorizer:
-  #         #   arn: ${self:custom.environment.AUTH_ARN}
-  # iamRoleStatements:
-  #   - Effect: 'Allow'
-  #     Action:
-  #       - dynamodb:Query
-  #       - dynamodb:GetItem
-  #       - dynamodb:CreateTable
-  #     Resource: ${self:custom.environment.USER_TABLE}/index/userIndex
+  getUserFromPlate:
+    handler: src/handlers/getUserFromPlate.default
+    events:
+      - sns: plate-service-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
 
 plugins:
   - serverless-webpack
