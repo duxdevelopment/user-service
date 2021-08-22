@@ -64,6 +64,10 @@ functions:
         Action:
           - dynamodb:Query
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
+      - Effect: 'Allow'
+        Action:
+          - SNS:Publish
+        Resource: 'arn:aws:sns:ap-southeast-2:457286094131:user-service-${self:provider.stage}'
 
 plugins:
   - serverless-webpack
