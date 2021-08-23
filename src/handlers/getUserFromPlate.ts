@@ -10,13 +10,14 @@ const getUserFromPlate = async (event: AWSLambda.SNSEvent): Promise<void> => {
   console.log(JSON.stringify(event));
 
   const { plate, cost } = JSON.parse(event.Records[0].Sns.Message);
+  const { plateId } = plate;
 
   const user = await User.query('userId').eq(plate.userId).exec();
   console.log(user);
 
   if (user.count != 0) {
     const price = (Math.round(cost) / 100).toFixed(2);
-    const msg = { user: user[0], cost, price };
+    const msg = { user: user[0], plateId, cost, price };
 
     const params = {
       Message: JSON.stringify(msg),
