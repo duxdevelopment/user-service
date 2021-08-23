@@ -15,7 +15,8 @@ const getUserFromPlate = async (event: AWSLambda.SNSEvent): Promise<void> => {
   console.log(user);
 
   if (user.count != 0) {
-    const msg = { user, cost };
+    const price = (Math.round(cost) / 100).toFixed(2);
+    const msg = { user: user[0], cost, price };
 
     const params = {
       Message: JSON.stringify(msg),
@@ -24,6 +25,14 @@ const getUserFromPlate = async (event: AWSLambda.SNSEvent): Promise<void> => {
 
     await sns.publish(params).promise();
     console.log('Published to user service topic');
+
+    // const notification = {
+    //   Message: `TEXT_MESSAGE: Payment of $${price} made by ${plate.registration}`,
+    //   PhoneNumber: user[0].phoneNumber,
+    // };
+
+    // await sns.publish(notification).promise();
+    // console.log('Notification sent to user');
   }
 };
 
