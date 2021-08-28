@@ -1,15 +1,9 @@
 service: user-service
 
-package:
-  individually: true
-  exclude:
-    - ./logo.png
-
 provider:
   name: aws
   runtime: nodejs12.x
-  profile: phalt
-  stage: ${opt:stage, env:STAGE, self:custom.defaultStage}
+  stage: ${opt:stage}
   region: ap-southeast-2
   environment: ${self:custom.environment.currentSettings}
 
