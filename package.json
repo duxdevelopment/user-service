@@ -59,6 +59,7 @@
     "aws-amplify": "^4.2.0",
     "aws-sdk": "^2.948.0",
     "dynamoose": "^2.7.3",
+    "jwt-decode": "^3.1.2",
     "stripe": "^8.165.0",
     "uuid": "^8.3.2"
   }
