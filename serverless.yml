@@ -67,11 +67,11 @@ functions:
         Action:
           - SNS:Publish
         Resource: '*'
-  getStripeDetails:
-    handler: src/handlers/getStripeDetails.default
+  getPaymentMethods:
+    handler: src/handlers/getPaymentMethods.default
     events:
       - http:
-          path: get-stripe-details
+          path: get-payment-methods
           method: get
           cors: true
           authorizer:
