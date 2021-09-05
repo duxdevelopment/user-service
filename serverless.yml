@@ -45,6 +45,20 @@ functions:
           - dynamodb:CreateTable
           - dynamodb:Query
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
+  registerUserST:
+    handler: src/handlers/registerUserST.default
+    events:
+      - http:
+          path: register-st
+          method: post
+          cors: true
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:PutItem
+          - dynamodb:CreateTable
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
   notifyUserPlateRecognition:
     handler: src/handlers/registerUser.default
     events:
