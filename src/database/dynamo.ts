@@ -17,7 +17,7 @@ export const userSchema = ({
 }: userSchemaInterface) => {
   return {
     RequestItems: {
-      'USERS-TEST': [
+      [`${process.env.TABLE_PREFIX}USERS`]: [
         {
           PutRequest: {
             Item: {
