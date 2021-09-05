@@ -32,6 +32,18 @@ export const userSchema = ({
         {
           PutRequest: {
             Item: {
+              PK: `UG#${id}`,
+              SK: `USER#${id}`,
+              isUserGroupOwner: true,
+              firstName: firstName,
+              lastName: lastName,
+              GSI_1_PK: `USER#${id}`,
+            },
+          },
+        },
+        {
+          PutRequest: {
+            Item: {
               PK: `USER#${id}`,
               SK: `#METADATA#${id}`,
               enitityType: 'user',
