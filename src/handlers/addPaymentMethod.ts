@@ -9,41 +9,44 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2020-08-27',
 });
 
-const getPaymentDetails = async (
+const addPaymentMethod = async (
   event: AWSLambda.APIGatewayEvent
 ): Promise<Response> => {
   try {
     const headers: APIGatewayProxyEventHeaders = event.headers;
     const decode: any = jwt_decode(headers.Authorization!);
     const userId = decode['custom:userId'];
+    const { formData } = JSON.parse(event.body!);
+    const { cardNumber, expMonth, expYear, cvc, cardHolder }: any = formData;
 
     const stripeId: any = await getStripeId(userId);
 
-    const paymentMethods = (
-      await stripe.paymentMethods.list({
-        customer: stripeId,
-        type: 'card',
-      })
-    ).data.map((method) => {
-      const { brand, exp_month, exp_year, last4 } = method.card!;
-      const card = {
-        brand,
-        expMonth: exp_month,
-        expYear: exp_year,
-        last4,
-      };
-      return card;
+    const card = await stripe.paymentMethods.create({
+      type: 'card',
+      card: {
+        number: cardNumber,
+        exp_month: expMonth,
+        exp_year: expYear,
+        cvc: cvc,
+      },
+      billing_details: {
+        name: cardHolder,
+      },
+    });
+
+    const paymentMethod = await stripe.paymentMethods.attach(card.id, {
+      customer: stripeId,
     });
 
     return corsSuccessResponse({
-      message: 'Fetched payment methods',
-      paymentMethods,
+      message: 'Successfully added payment method',
+      paymentMethod,
     });
   } catch (err) {
     console.log(err);
   }
   const response = corsErrorResponse({
-    message: 'Error fetching payment methods',
+    message: 'Error adding payment method',
   });
 
   return response;
@@ -51,4 +54,4 @@ const getPaymentDetails = async (
 
 // runWarm function handles pings from the scheduler so you don't
 // have to put that boilerplate in your function.
-export default runWarm(getPaymentDetails);
+export default runWarm(addPaymentMethod);
