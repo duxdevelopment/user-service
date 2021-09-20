@@ -9,6 +9,7 @@ import { createUser } from '../database/createUser';
 import { createStripeUser } from './createStripeUser';
 import { Auth, Amplify } from 'aws-amplify';
 import awsmobile from '../amplifyConfig';
+import { checkEmailST } from './getUserByEmailST';
 
 Amplify.configure(awsmobile);
 interface userInterface {
@@ -35,6 +36,16 @@ const registerUser = async (
 
     try {
       const uid = uuidv4();
+
+      const emailInUse = await checkEmailST(email);
+
+      console.log(emailInUse);
+
+      if (emailInUse) {
+        return corsErrorResponse({
+          message: 'email in use',
+        });
+      }
 
       const { id } = await createStripeUser({ firstName, lastName, email });
 

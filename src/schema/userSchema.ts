@@ -18,17 +18,18 @@ export const userSchema = ({
   const PK = `USER:${id}`;
   const SK = `META:${id}`;
   const emailIndex = `EMAIL:${email}`;
-  const phoneIndex = `PHONE:${phoneNumber}`;
+  // const phoneIndex = `PHONE:${phoneNumber}`;
 
   return {
     PK: PK,
     SK: SK,
+    entityType: 'user',
     firstName: firstName,
     lastName: lastName,
     email: email,
     phoneNumber: phoneNumber,
     stripeId: stripeId,
     GSI_1_PK: emailIndex,
-    GSI_2_PK: phoneIndex,
+    // GSI_2_PK: phoneIndex,
   };
 };

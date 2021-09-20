@@ -10,6 +10,7 @@ export const userGroupSchema = ({ id, userGroupType }: userSchemaInterface) => {
   return {
     PK: PK,
     SK: SK,
+    entityType: 'userGroup',
     userGroupType: userGroupType,
   };
 };
