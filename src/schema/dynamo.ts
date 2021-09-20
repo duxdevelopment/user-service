@@ -17,7 +17,7 @@ export const userSchema = ({
 }: userSchemaInterface) => {
   return {
     RequestItems: {
-      [`${process.env.TABLE_PREFIX}USERS`]: [
+      [`USERS-TEST`]: [
         {
           PutRequest: {
             Item: {
@@ -37,7 +37,6 @@ export const userSchema = ({
               isUserGroupOwner: true,
               firstName: firstName,
               lastName: lastName,
-              GSI_1_PK: `USER#${id}`,
             },
           },
         },
@@ -54,6 +53,7 @@ export const userSchema = ({
               email: email,
               phoneNumber: phoneNumber,
               stripeId: stripeId,
+              created: Date.now(),
             },
           },
         },

@@ -1,4 +1,4 @@
-import { User } from '../database/schema';
+import { User } from '../schema/schema';
 
 export const checkEmail = async (email: string): Promise<boolean> => {
   try {

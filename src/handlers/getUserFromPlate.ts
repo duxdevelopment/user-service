@@ -1,4 +1,4 @@
-import { User } from '../database/schema';
+import { User } from '../schema/schema';
 import { runWarm } from '../utils';
 import { SNS } from 'aws-sdk';
 

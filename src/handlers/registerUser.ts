@@ -6,7 +6,7 @@ import {
 } from '../utils/lambda-response';
 import { checkEmail } from './getUserByEmail';
 import { v4 as uuidv4 } from 'uuid';
-import { User } from '../database/schema';
+import { User } from '../schema/schema';
 import { createStripeUser } from './createStripeUser';
 import { Auth, Amplify } from 'aws-amplify';
 import awsmobile from '../amplifyConfig';

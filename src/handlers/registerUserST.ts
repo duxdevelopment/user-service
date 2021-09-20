@@ -5,9 +5,7 @@ import {
   Response,
 } from '../utils/lambda-response';
 import { v4 as uuidv4 } from 'uuid';
-import { checkEmailST } from './getUserByEmailST';
-import { DynamoDB } from 'aws-sdk';
-import { userSchema } from '../database/dynamo';
+import { createUser } from '../database/createUser';
 import { createStripeUser } from './createStripeUser';
 import { Auth, Amplify } from 'aws-amplify';
 import awsmobile from '../amplifyConfig';
@@ -20,8 +18,6 @@ interface userInterface {
   password: string;
   phoneNumber: string;
 }
-
-const client = new DynamoDB.DocumentClient();
 
 const registerUser = async (
   event: AWSLambda.APIGatewayEvent
@@ -37,32 +33,23 @@ const registerUser = async (
       phoneNumber,
     }: userInterface = JSON.parse(event.body);
 
-    const exists = await checkEmailST(email);
-
-    if (exists) {
-      return corsErrorResponse({
-        message: 'user already exists',
-      });
-    }
-
     try {
       const uid = uuidv4();
 
       const { id } = await createStripeUser({ firstName, lastName, email });
 
-      const user = userSchema({
+      console.log(id);
+
+      const user = await createUser({
         id: uid,
         stripeId: id,
         firstName,
         lastName,
-        email,
         phoneNumber,
+        email,
       });
 
-      client
-        .batchWrite(user)
-        .promise()
-        .then((res) => console.log(res));
+      console.log(user);
 
       const signUp = await Auth.signUp({
         username: email,

@@ -14,7 +14,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "build": "sls webpack",
-    "watch:hello": "sls invoke local --watch --function hello --path fixtures/event.json"
+    "watch:createTable": "AWS_PROFILE=phalt sls invoke local --watch --function createTable --stage staging --data test"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.39",
