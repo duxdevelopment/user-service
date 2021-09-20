@@ -1,5 +1,5 @@
 import { DynamoDB } from 'aws-sdk';
-import { PutItemInput } from 'aws-sdk/clients/dynamodb';
+import { userGroupSchema } from '../schema/userGroupSchema';
 import { userSchema } from '../schema/userSchema';
 const client = new DynamoDB.DocumentClient();
 
@@ -10,6 +10,7 @@ interface userInterface {
   lastName: string;
   email: string;
   phoneNumber: string;
+  userGroupType?: string;
 }
 
 export const createUser = async ({
@@ -19,6 +20,7 @@ export const createUser = async ({
   lastName,
   email,
   phoneNumber,
+  userGroupType = 'standard',
 }: userInterface) => {
   const user = userSchema({
     id,
@@ -28,12 +30,26 @@ export const createUser = async ({
     email,
     phoneNumber,
   });
-  const params: PutItemInput = {
+
+  const params = {
     TableName: `USERS${process.env.TABLE_PREFIX}`,
     Item: user,
   };
 
   const createUser = await client.put(params).promise();
+
+  console.log('USER CREATED:', createUser);
+
+  const userGroup = userGroupSchema({ id, userGroupType });
+
+  const ugParams = {
+    TableName: `USERS${process.env.TABLE_PREFIX}`,
+    Item: userGroup,
+  };
+
+  const createUserGroup = await client.put(ugParams).promise();
+
+  console.log('USER GROUP CREATED:', createUserGroup);
 
   return createUser;
 };

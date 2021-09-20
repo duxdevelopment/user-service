@@ -3,11 +3,13 @@ interface userSchemaInterface {
   userGroupType: string;
 }
 
-export const userGroupSchema = ({
-  id,
-  userGroupType,
-}: userSchemaInterface) => ({
-  PK: { S: `UG:${id}` },
-  SK: { S: `META:${id}` },
-  userGroupType: { S: userGroupType },
-});
+export const userGroupSchema = ({ id, userGroupType }: userSchemaInterface) => {
+  const PK = `UG:${id}`;
+  const SK = `META:${id}`;
+
+  return {
+    PK: PK,
+    SK: SK,
+    userGroupType: userGroupType,
+  };
+};

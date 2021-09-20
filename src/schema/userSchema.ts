@@ -14,12 +14,21 @@ export const userSchema = ({
   email,
   stripeId,
   phoneNumber,
-}: userSchemaInterface) => ({
-  PK: { S: `USER:${id}` },
-  SK: { S: `META:${id}` },
-  firstName: { S: firstName },
-  lastName: { S: lastName },
-  email: { S: email },
-  phoneNumber: { S: phoneNumber },
-  stripeId: { S: stripeId },
-});
+}: userSchemaInterface) => {
+  const PK = `USER:${id}`;
+  const SK = `META:${id}`;
+  const emailIndex = `EMAIL:${email}`;
+  const phoneIndex = `PHONE:${phoneNumber}`;
+
+  return {
+    PK: PK,
+    SK: SK,
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    phoneNumber: phoneNumber,
+    stripeId: stripeId,
+    GSI_1_PK: emailIndex,
+    GSI_2_PK: phoneIndex,
+  };
+};

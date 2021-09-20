@@ -41,7 +41,7 @@ const registerUser = async (
       console.log(id);
 
       const user = await createUser({
-        id: uid,
+        id: `${uid}`,
         stripeId: id,
         firstName,
         lastName,
