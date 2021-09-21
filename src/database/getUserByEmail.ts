@@ -1,6 +1,6 @@
 import { DynamoDB } from 'aws-sdk';
 const client = new DynamoDB.DocumentClient();
-export const checkEmailST = async (email: string): Promise<boolean> => {
+export const checkEmail = async (email: string): Promise<boolean> => {
   console.log(email);
   const params = {
     IndexName: 'GSI_1',
@@ -15,9 +15,8 @@ export const checkEmailST = async (email: string): Promise<boolean> => {
     .query(params)
     .promise()
     .then((res: any) => {
-      console.log(res);
       if (res.Count > 0) {
-        return true;
+        return res.Items;
       }
       return false;
     })

@@ -5,6 +5,7 @@ interface userSchemaInterface {
   lastName: string;
   email: string;
   phoneNumber: string;
+  isActive?: boolean;
 }
 
 export const userSchema = ({
@@ -14,10 +15,12 @@ export const userSchema = ({
   email,
   stripeId,
   phoneNumber,
+  isActive,
 }: userSchemaInterface) => {
   const PK = `USER:${id}`;
   const SK = `META:${id}`;
   const emailIndex = `EMAIL:${email}`;
+  const activeStatus = `STATUS:${isActive}`;
   // const phoneIndex = `PHONE:${phoneNumber}`;
 
   return {
@@ -30,6 +33,8 @@ export const userSchema = ({
     phoneNumber: phoneNumber,
     stripeId: stripeId,
     GSI_1_PK: emailIndex,
-    // GSI_2_PK: phoneIndex,
+    isActive: isActive,
+    GSI_1_SK: activeStatus,
+    createdAt: Date.now(),
   };
 };

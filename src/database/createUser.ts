@@ -11,6 +11,7 @@ interface userInterface {
   email: string;
   phoneNumber: string;
   userGroupType?: string;
+  isActive?: boolean;
 }
 
 export const createUser = async ({
@@ -20,6 +21,7 @@ export const createUser = async ({
   lastName,
   email,
   phoneNumber,
+  isActive = true,
   userGroupType = 'standard',
 }: userInterface) => {
   const user = userSchema({
@@ -29,6 +31,7 @@ export const createUser = async ({
     lastName,
     email,
     phoneNumber,
+    isActive,
   });
 
   const params = {

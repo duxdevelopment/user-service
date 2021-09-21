@@ -1,17 +1,19 @@
-// import { UserGroup } from '../schema/userGrouSchema';
+import { DynamoDB } from 'aws-sdk';
+const client = new DynamoDB.DocumentClient();
 
-// interface userInterface {
-//   id: string;
-//   stripeId: string;
-//   sk: string;
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   phoneNumber: string;
-// }
+export const addUserToGroup = async (id: string, userGroupId: string) => {
+  const userGroup = `UG:${userGroupId}`;
+  const user = `USER:${id}`;
+  const params = {
+    TableName: `USERS${process.env.TABLE_PREFIX}`,
+    Item: {
+      PK: userGroup,
+      SK: user,
+      userId: id,
+    },
+  };
 
-// export const createUser = async (user: userInterface) => {
-//   const createUser = await User.put(user);
+  const addUserToGroup = await client.put(params).promise();
 
-//   return createUser;
-// };
+  return addUserToGroup;
+};

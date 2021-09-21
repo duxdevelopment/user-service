@@ -38,6 +38,19 @@ functions:
         Action:
           - dynamodb:CreateTable
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+  getUserGroups:
+    handler: src/handlers/getUserGroupForUser.default
+    events:
+      - http:
+          path: fuck-you
+          method: get
+          cors: true
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:PutItem
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
   registerUser:
     handler: src/handlers/registerUser.default
     events:
@@ -49,21 +62,6 @@ functions:
       - Effect: 'Allow'
         Action:
           - dynamodb:PutItem
-          - dynamodb:CreateTable
-          - dynamodb:Query
-        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
-  registerUserST:
-    handler: src/handlers/registerUserST.default
-    events:
-      - http:
-          path: register-st
-          method: post
-          cors: true
-    iamRoleStatements:
-      - Effect: 'Allow'
-        Action:
-          - dynamodb:PutItem
-          - dynamodb:CreateTable
           - dynamodb:Query
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
   notifyUserPlateRecognition:
@@ -106,26 +104,8 @@ functions:
           - dynamodb:Query
           - dynamodb:Scan
           - dynamodb:GetItem
-        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
-  getUserGroupsForUser:
-    handler: src/handlers/getUserGroupsForUser.default
-    events:
-      - http:
-          path: get-user-groups
-          method: get
-          cors: true
-          authorizer:
-            arn: ${self:provider.environment.AUTH_ARN}
-            identitySource: method.request.header.Authorization
-            type: token
-            resultTtlInSeconds: 1800
-    iamRoleStatements:
-      - Effect: 'Allow'
-        Action:
-          - dynamodb:Query
-          - dynamodb:PutItem
-          - dynamodb:GetItem
-        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+
 plugins:
   - serverless-webpack
   - serverless-offline

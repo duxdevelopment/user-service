@@ -1,9 +1,12 @@
-interface userSchemaInterface {
+interface userGroupSchemaInterface {
   id: string;
   userGroupType: string;
 }
 
-export const userGroupSchema = ({ id, userGroupType }: userSchemaInterface) => {
+export const userGroupSchema = ({
+  id,
+  userGroupType,
+}: userGroupSchemaInterface) => {
   const PK = `UG:${id}`;
   const SK = `META:${id}`;
 
@@ -12,5 +15,6 @@ export const userGroupSchema = ({ id, userGroupType }: userSchemaInterface) => {
     SK: SK,
     entityType: 'userGroup',
     userGroupType: userGroupType,
+    createdAt: Date.now(),
   };
 };
