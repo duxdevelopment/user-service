@@ -21,6 +21,26 @@ const params = {
   ],
   GlobalSecondaryIndexes: [
     {
+      IndexName: 'invertedIndex',
+      KeySchema: [
+        {
+          AttributeName: 'SK',
+          KeyType: 'HASH',
+        },
+        {
+          AttributeName: 'PK',
+          KeyType: 'RANGE',
+        },
+      ],
+      ProvisionedThroughput: {
+        ReadCapacityUnits: 1,
+        WriteCapacityUnits: 1,
+      },
+      Projection: {
+        ProjectionType: 'ALL',
+      },
+    },
+    {
       IndexName: 'GSI_1',
       KeySchema: [
         {
@@ -36,7 +56,6 @@ const params = {
         ReadCapacityUnits: 1,
         WriteCapacityUnits: 1,
       },
-
       Projection: {
         ProjectionType: 'ALL',
       },
