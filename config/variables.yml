@@ -14,18 +14,18 @@ preProdShared: &preProdShared
 stages:
   dev:
     <<: *preProdShared
-    TABLE_PREFIX: STAGING-
+    TABLE_PREFIX: -STAGING
     STRIPE_SECRET_KEY: ${ssm:STRIPE_TEST_SECRET_KEY}
     STRIPE_PUBLIC_KEY: ${ssm:STRIPE_TEST_PUBLIC_KEY}
 
   staging:
     <<: *preProdShared
-    TABLE_PREFIX: STAGING-
+    TABLE_PREFIX: -STAGING
     STRIPE_SECRET_KEY: ${ssm:STRIPE_TEST_SECRET_KEY}
     STRIPE_PUBLIC_KEY: ${ssm:STRIPE_TEST_PUBLIC_KEY}
 
   prod: &prod
     <<: *shared
-    TABLE_PREFIX: PROD-
+    TABLE_PREFIX: -PROD
     STRIPE_SECRET_KEY: ${ssm:STRIPE_SECRET_KEY}
     STRIPE_PUBLIC_KEY: ${ssm:STRIPE_PUBLIC_KEY}

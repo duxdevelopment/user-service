@@ -31,6 +31,26 @@ custom:
 functions:
   preSignUp:
     handler: src/handlers/preSignUp.default
+  createTable:
+    handler: src/schema/tableSchema.handler
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:CreateTable
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+  getUserGroups:
+    handler: src/handlers/getUserGroupForUser.default
+    events:
+      - http:
+          path: fuck-you
+          method: get
+          cors: true
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:PutItem
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
   registerUser:
     handler: src/handlers/registerUser.default
     events:
@@ -42,7 +62,6 @@ functions:
       - Effect: 'Allow'
         Action:
           - dynamodb:PutItem
-          - dynamodb:CreateTable
           - dynamodb:Query
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
   notifyUserPlateRecognition:
@@ -85,7 +104,7 @@ functions:
           - dynamodb:Query
           - dynamodb:Scan
           - dynamodb:GetItem
-        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
   addPaymentMethod:
     handler: src/handlers/addPaymentMethod.default
     events:

@@ -4,12 +4,12 @@ import {
   corsSuccessResponse,
   Response,
 } from '../utils/lambda-response';
-import { checkEmail } from './getUserByEmail';
 import { v4 as uuidv4 } from 'uuid';
-import { User } from '../database/schema';
+import { createUser } from '../database/createUser';
 import { createStripeUser } from './createStripeUser';
 import { Auth, Amplify } from 'aws-amplify';
 import awsmobile from '../amplifyConfig';
+import { checkEmail } from '../database/getUserByEmail';
 
 Amplify.configure(awsmobile);
 interface userInterface {
@@ -34,28 +34,33 @@ const registerUser = async (
       phoneNumber,
     }: userInterface = JSON.parse(event.body);
 
-    const exists = await checkEmail(email);
-
-    if (exists) {
-      return corsErrorResponse({
-        message: 'user already exists',
-      });
-    }
-
     try {
       const uid = uuidv4();
 
+      const emailInUse = await checkEmail(email);
+
+      console.log(emailInUse);
+
+      if (emailInUse) {
+        return corsErrorResponse({
+          message: 'email in use',
+        });
+      }
+
       const { id } = await createStripeUser({ firstName, lastName, email });
-      const userDoc = new User({
-        userId: uid,
+
+      console.log(id);
+
+      const user = await createUser({
+        id: `${uid}`,
+        stripeId: id,
         firstName,
         lastName,
-        email,
-        stripeId: id,
         phoneNumber,
+        email,
       });
 
-      await userDoc.save();
+      console.log(user);
 
       const signUp = await Auth.signUp({
         username: email,
