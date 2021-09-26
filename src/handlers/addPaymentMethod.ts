@@ -1,9 +1,9 @@
 import { corsSuccessResponse, corsErrorResponse, runWarm } from '../utils';
 import { Response } from '../utils/lambda-response';
 import { APIGatewayProxyEventHeaders } from 'aws-lambda';
-import { getStripeId } from './getStripeId';
 import Stripe from 'stripe';
 import jwt_decode from 'jwt-decode';
+import { getUserById } from '../database/getUserById';
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2020-08-27',
@@ -16,10 +16,13 @@ const addPaymentMethod = async (
     const headers: APIGatewayProxyEventHeaders = event.headers;
     const decode: any = jwt_decode(headers.Authorization!);
     const userId = decode['custom:userId'];
-    const { formData } = JSON.parse(event.body!);
-    const { cardNumber, expMonth, expYear, cvc, cardHolder }: any = formData;
+    const { cardNumber, expMonth, expYear, cvc, cardHolder } = JSON.parse(
+      event.body!
+    );
 
-    const stripeId: any = await getStripeId(userId);
+    const [user]: any = await getUserById(userId);
+
+    const { stripeId } = user;
 
     const card = await stripe.paymentMethods.create({
       type: 'card',

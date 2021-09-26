@@ -1,9 +1,9 @@
 import { corsSuccessResponse, corsErrorResponse, runWarm } from '../utils';
 import { Response } from '../utils/lambda-response';
 import { APIGatewayProxyEventHeaders } from 'aws-lambda';
-import { getStripeId } from './getStripeId';
 import Stripe from 'stripe';
 import jwt_decode from 'jwt-decode';
+import { getUserById } from '../database/getUserById';
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2020-08-27',
@@ -17,7 +17,9 @@ const getPaymentDetails = async (
     const decode: any = jwt_decode(headers.Authorization!);
     const userId = decode['custom:userId'];
 
-    const stripeId: any = await getStripeId(userId);
+    const [user]: any = await getUserById(userId);
+
+    const { stripeId } = user;
 
     const paymentMethods = (
       await stripe.paymentMethods.list({

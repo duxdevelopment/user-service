@@ -1,5 +1,5 @@
 import { DynamoDB } from 'aws-sdk';
-import { userGroupSchema } from '../schema/userGroupSchema';
+import { fleetSchema } from '../schema/fleetSchema';
 import { userSchema } from '../schema/userSchema';
 const client = new DynamoDB.DocumentClient();
 
@@ -10,7 +10,7 @@ interface userInterface {
   lastName: string;
   email: string;
   phoneNumber: string;
-  userGroupType?: string;
+  fleetType?: string;
   isActive?: boolean;
 }
 
@@ -22,7 +22,7 @@ export const createUser = async ({
   email,
   phoneNumber,
   isActive = true,
-  userGroupType = 'standard',
+  fleetType = 'standard',
 }: userInterface) => {
   const user = userSchema({
     id,
@@ -43,7 +43,7 @@ export const createUser = async ({
 
   console.log('USER CREATED:', createUser);
 
-  const userGroup = userGroupSchema({ id, userGroupType });
+  const userGroup = fleetSchema({ id, fleetType });
 
   const ugParams = {
     TableName: `USERS${process.env.TABLE_PREFIX}`,
