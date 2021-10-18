@@ -27,6 +27,7 @@ export const userSchema = ({
     PK: PK,
     SK: SK,
     entityType: 'user',
+    id: id,
     firstName: firstName,
     lastName: lastName,
     email: email,

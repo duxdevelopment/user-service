@@ -1,16 +1,16 @@
 import { DynamoDB } from 'aws-sdk';
-import { userSchema } from '../schema/userSchema';
+import { fleetSchema } from '../../schema/fleetSchema';
 const client = new DynamoDB.DocumentClient();
 
-export const checkEmail = async (
-  email: string
-): Promise<[typeof userSchema]> => {
-  console.log(email);
+export const getUsersInFleet = async (
+  id: string
+): Promise<[typeof fleetSchema]> => {
+  console.log(id);
   const params = {
-    IndexName: 'GSI_1',
-    KeyConditionExpression: 'GSI_1_PK = :email',
+    KeyConditionExpression: 'PK = :fleet AND begins_with(SK, :user)',
     ExpressionAttributeValues: {
-      ':email': `EMAIL:${email}`,
+      ':fleet': `FLEET:${id}`,
+      ':user': 'USER',
     },
     TableName: `USERS${process.env.TABLE_PREFIX}`,
   };

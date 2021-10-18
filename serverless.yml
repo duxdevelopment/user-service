@@ -51,6 +51,31 @@ functions:
           - dynamodb:PutItem
           - dynamodb:Query
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+  getFleetUsers:
+    handler: src/handlers/fleets/getUsersInFleet.default
+    events:
+      - http:
+          path: fleet-users
+          method: get
+          cors: true
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+  addUserToFleet:
+    handler: src/handlers/fleets/addUserToFleet.default
+    events:
+      - http:
+          path: add-user-to-fleet
+          method: post
+          cors: true
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:PutItem
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
   registerUser:
     handler: src/handlers/registerUser.default
     events:
