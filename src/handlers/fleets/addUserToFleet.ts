@@ -15,7 +15,7 @@ const addUserToFleetHandler = async (
 
     const { email, plateLimit }: any = JSON.parse(event.body!);
 
-    const requestedUser: any = await checkEmail(email);
+    const [requestedUser]: any = await checkEmail(email);
     console.log(requestedUser);
 
     if (!requestedUser) {
