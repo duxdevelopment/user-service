@@ -1,3 +1,5 @@
+import { createKey, toItem } from './base';
+
 interface userSchemaInterface {
   id: string;
   firstName: string;
@@ -23,9 +25,8 @@ export const userSchema = ({
   const activeStatus = `STATUS:${isActive}`;
   // const phoneIndex = `PHONE:${phoneNumber}`;
 
-  return {
-    PK: PK,
-    SK: SK,
+  return toItem({
+    ...createKey(PK, SK),
     entityType: 'user',
     id: id,
     firstName: firstName,
@@ -37,5 +38,5 @@ export const userSchema = ({
     isActive: isActive,
     GSI_1_SK: activeStatus,
     createdAt: Date.now(),
-  };
+  });
 };

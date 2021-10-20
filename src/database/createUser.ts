@@ -1,7 +1,7 @@
-import { DynamoDB } from 'aws-sdk';
+import { PutItemInput } from 'aws-sdk/clients/dynamodb';
 import { fleetSchema } from '../schema/fleetSchema';
 import { userSchema } from '../schema/userSchema';
-const client = new DynamoDB.DocumentClient();
+import { getClient } from '../schema/base';
 
 interface userInterface {
   id: string;
@@ -24,6 +24,7 @@ export const createUser = async ({
   isActive = true,
   fleetType = 'standard',
 }: userInterface) => {
+  const client = getClient();
   const user = userSchema({
     id,
     stripeId,
@@ -34,23 +35,23 @@ export const createUser = async ({
     isActive,
   });
 
-  const params = {
+  const params: PutItemInput = {
     TableName: `USERS${process.env.TABLE_PREFIX}`,
     Item: user,
   };
 
-  const createUser = await client.put(params).promise();
+  const createUser = await client.putItem(params).promise();
 
   console.log('USER CREATED:', createUser);
 
   const userGroup = fleetSchema({ id, fleetType });
 
-  const ugParams = {
+  const ugParams: PutItemInput = {
     TableName: `USERS${process.env.TABLE_PREFIX}`,
     Item: userGroup,
   };
 
-  const createUserGroup = await client.put(ugParams).promise();
+  const createUserGroup = await client.putItem(ugParams).promise();
 
   console.log('USER GROUP CREATED:', createUserGroup);
 

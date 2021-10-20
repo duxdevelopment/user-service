@@ -1,17 +1,18 @@
-import { DynamoDB } from 'aws-sdk';
 import { userSchema } from '../schema/userSchema';
-const client = new DynamoDB.DocumentClient();
+import { getClient, toItem } from '../schema/base';
+import { QueryInput } from 'aws-sdk/clients/dynamodb';
 
 export const checkEmail = async (
   email: string
 ): Promise<[typeof userSchema]> => {
+  const client = getClient();
   console.log(email);
-  const params = {
+  const params: QueryInput = {
     IndexName: 'GSI_1',
     KeyConditionExpression: 'GSI_1_PK = :email',
-    ExpressionAttributeValues: {
+    ExpressionAttributeValues: toItem({
       ':email': `EMAIL:${email}`,
-    },
+    }),
     TableName: `USERS${process.env.TABLE_PREFIX}`,
   };
 

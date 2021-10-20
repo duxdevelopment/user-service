@@ -1,12 +1,13 @@
-import { DynamoDB } from 'aws-sdk';
-const client = new DynamoDB.DocumentClient();
+import { QueryInput } from 'aws-sdk/clients/dynamodb';
+import { getClient, toItem } from '../schema/base';
 export const getUserById = async (id: string): Promise<boolean> => {
-  const params = {
+  const client = getClient();
+  const params: QueryInput = {
     KeyConditionExpression: 'PK = :userId and begins_with(SK,:meta)',
-    ExpressionAttributeValues: {
+    ExpressionAttributeValues: toItem({
       ':userId': `USER:${id}`,
       ':meta': 'META',
-    },
+    }),
     TableName: `USERS${process.env.TABLE_PREFIX}`,
   };
 

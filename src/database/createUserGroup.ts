@@ -1,15 +1,16 @@
-import { DynamoDB } from 'aws-sdk';
+import { PutItemInput } from 'aws-sdk/clients/dynamodb';
+import { getClient } from '../schema/base';
 import { fleetSchema } from '../schema/fleetSchema';
-const client = new DynamoDB.DocumentClient();
 
 export const createUserGroup = async (id: string, fleetType: string) => {
+  const client = getClient();
   const fleet = fleetSchema({ id, fleetType });
-  const params = {
+  const params: PutItemInput = {
     TableName: `USERS${process.env.TABLE_PREFIX}`,
     Item: fleet,
   };
 
-  const createUserGroup = await client.put(params).promise();
+  const createUserGroup = await client.putItem(params).promise();
 
   return createUserGroup;
 };

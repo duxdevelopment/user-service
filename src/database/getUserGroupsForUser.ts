@@ -1,15 +1,15 @@
-import { DynamoDB } from 'aws-sdk';
-
-const client = new DynamoDB.DocumentClient();
+import { QueryInput } from 'aws-sdk/clients/dynamodb';
+import { getClient, toItem } from '../schema/base';
 
 export const getUserGroupsForUser = async (userId: string) => {
-  const params = {
+  const client = getClient();
+  const params: QueryInput = {
     IndexName: 'invertedIndex',
     KeyConditionExpression: 'SK = :user and begins_with(PK,:ug)',
-    ExpressionAttributeValues: {
+    ExpressionAttributeValues: toItem({
       ':user': `USER:${userId}`,
       ':ug': 'UG',
-    },
+    }),
     TableName: `USERS${process.env.TABLE_PREFIX}`,
   };
 

@@ -1,26 +1,21 @@
-import { DynamoDB } from 'aws-sdk';
-const client = new DynamoDB.DocumentClient();
+import { PutItemInput } from 'aws-sdk/clients/dynamodb';
+import { getClient } from '../schema/base';
+import { fleetUserSchema } from '../schema/fleetSchema';
 
 export const addUserToFleet = async (
   id: string,
   email: string,
-  plateLimit: number,
-  fleetId: string
+  fleet: string
 ) => {
-  const fleet = `FLEET:${fleetId}`;
-  const user = `USER:${id}`;
-  const params = {
+  const client = getClient();
+  const fleetId = `FLEET:${fleet}`;
+  const userId = `USER:${id}`;
+  const params: PutItemInput = {
     TableName: `USERS${process.env.TABLE_PREFIX}`,
-    Item: {
-      PK: fleet,
-      SK: user,
-      email: email,
-      plateLimit: plateLimit,
-      userId: id,
-    },
+    Item: fleetUserSchema({ fleetId, userId, email }),
   };
 
-  const addtoFleet = await client.put(params).promise();
+  const addtoFleet = await client.putItem(params).promise();
 
   return addtoFleet;
 };

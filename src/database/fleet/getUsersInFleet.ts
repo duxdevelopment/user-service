@@ -1,16 +1,18 @@
-import { DynamoDB } from 'aws-sdk';
 import { fleetSchema } from '../../schema/fleetSchema';
-const client = new DynamoDB.DocumentClient();
+import { getClient } from '../../schema/base';
+import { QueryInput } from 'aws-sdk/clients/dynamodb';
 
 export const getUsersInFleet = async (
   id: string
 ): Promise<[typeof fleetSchema]> => {
   console.log(id);
-  const params = {
+  const client = getClient();
+
+  const params: QueryInput = {
     KeyConditionExpression: 'PK = :fleet AND begins_with(SK, :user)',
     ExpressionAttributeValues: {
-      ':fleet': `FLEET:${id}`,
-      ':user': 'USER',
+      ':fleet': { S: `FLEET:${id}` },
+      ':user': { S: 'USER' },
     },
     TableName: `USERS${process.env.TABLE_PREFIX}`,
   };
