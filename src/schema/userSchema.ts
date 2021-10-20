@@ -37,6 +37,5 @@ export const userSchema = ({
     GSI_1_PK: emailIndex,
     isActive: isActive,
     GSI_1_SK: activeStatus,
-    createdAt: Date.now(),
   });
 };

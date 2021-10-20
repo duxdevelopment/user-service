@@ -12,7 +12,6 @@ export const fleetSchema = ({ id, fleetType }: fleetSchemaInterface) => {
     ...createKey(PK, SK),
     entityType: 'fleet',
     userGroupType: fleetType,
-    createdAt: Date.now(),
   });
 };
 
@@ -34,6 +33,5 @@ export const fleetUserSchema = ({
     ...createKey(PK, SK),
     email,
     userId,
-    createdAt: Date.now(),
   });
 };

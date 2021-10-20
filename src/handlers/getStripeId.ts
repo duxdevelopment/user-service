@@ -1,22 +1,22 @@
-import { User } from '../schema/schema';
-import Stripe from 'stripe';
+// import Stripe from 'stripe';
+// import { getUserById } from '../database/getUserById';
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2020-08-27',
-});
+// export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+//   apiVersion: '2020-08-27',
+// });
 
-export const getStripeId = async (userId: string): Promise<string> => {
-  try {
-    const user = await User.query('userId').eq(userId).exec();
+// export const getStripeId = async (userId: string): Promise<string> => {
+//   try {
+//     const user = await getUserById(userId);
 
-    console.log(user);
+//     console.log(user);
 
-    if (user.count > 0) {
-      return user[0].stripeId;
-    }
-  } catch (error) {
-    console.log('failed to get user: ', error);
-  }
+//     if (user.Count! > 0) {
+//       return user.Items[0].stripeId!;
+//     }
+//   } catch (error) {
+//     console.log('failed to get user: ', error);
+//   }
 
-  return '';
-};
+//   return '';
+// };

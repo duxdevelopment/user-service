@@ -13,7 +13,7 @@ const addUserToFleetHandler = async (
     const decode: any = jwt_decode(headers.Authorization!);
     const userId = decode['custom:userId'];
 
-    const { email, plateLimit }: any = JSON.parse(event.body!);
+    const { email }: any = JSON.parse(event.body!);
 
     const [requestedUser]: any = await checkEmail(email);
     console.log(requestedUser);
@@ -24,12 +24,7 @@ const addUserToFleetHandler = async (
       });
     }
 
-    const addUser = await addUserToFleet(
-      requestedUser.id,
-      email,
-      plateLimit,
-      userId
-    );
+    const addUser = await addUserToFleet(requestedUser.id, email, userId);
 
     console.log(addUser);
 

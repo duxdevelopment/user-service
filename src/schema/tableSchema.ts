@@ -1,11 +1,12 @@
 import AWS from 'aws-sdk';
+import { CreateTableInput } from 'aws-sdk/clients/dynamodb';
 AWS.config.update({
   region: 'ap-southeast-2',
 });
 
 const dynamodb = new AWS.DynamoDB();
 
-const params = {
+const params: CreateTableInput = {
   TableName: `USERS${process.env.TABLE_PREFIX}`,
   KeySchema: [
     { AttributeName: 'PK', KeyType: 'HASH' },
@@ -19,6 +20,7 @@ const params = {
     { AttributeName: 'GSI_1_SK', AttributeType: 'S' },
     { AttributeName: 'GSI_2_SK', AttributeType: 'S' },
   ],
+  BillingMode: 'PAY_PER_REQUEST',
   GlobalSecondaryIndexes: [
     {
       IndexName: 'invertedIndex',
@@ -32,10 +34,6 @@ const params = {
           KeyType: 'RANGE',
         },
       ],
-      ProvisionedThroughput: {
-        ReadCapacityUnits: 1,
-        WriteCapacityUnits: 1,
-      },
       Projection: {
         ProjectionType: 'ALL',
       },
@@ -52,10 +50,6 @@ const params = {
           KeyType: 'RANGE',
         },
       ],
-      ProvisionedThroughput: {
-        ReadCapacityUnits: 1,
-        WriteCapacityUnits: 1,
-      },
       Projection: {
         ProjectionType: 'ALL',
       },
@@ -72,19 +66,11 @@ const params = {
           KeyType: 'RANGE',
         },
       ],
-      ProvisionedThroughput: {
-        ReadCapacityUnits: 1,
-        WriteCapacityUnits: 1,
-      },
       Projection: {
         ProjectionType: 'ALL',
       },
     },
   ],
-  ProvisionedThroughput: {
-    ReadCapacityUnits: 10,
-    WriteCapacityUnits: 10,
-  },
 };
 
 export const handler = async () => {

@@ -17,6 +17,7 @@ export const createKey = (pk: string, sk: string) => {
   return {
     PK: pk,
     SK: sk,
+    createdAt: Date.now(),
   };
 };
 

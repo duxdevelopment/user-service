@@ -1,5 +1,5 @@
-import { User } from '../schema/schema';
 import { runWarm } from '../utils';
+import { getUserById } from '../database/getUserById';
 // import { SNS } from 'aws-sdk';
 
 // const sns = new SNS({
@@ -13,11 +13,11 @@ const notifyUserPlateRecognition = async (
 
   const { Document } = JSON.parse(event.Records[0].Sns.Message);
 
-  await User.query('userId').eq(Document.userId).exec();
+  const { userId } = Document;
+
+  await getUserById(userId);
 
   //get user number from table
 };
 
-// runWarm function handles pings from the scheduler so you don't
-// have to put that boilerplate in your function.
 export default runWarm(notifyUserPlateRecognition);

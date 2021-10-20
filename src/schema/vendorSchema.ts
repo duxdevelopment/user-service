@@ -19,6 +19,5 @@ export const vendorSchema = ({
     entityType: 'vendor',
     state: state,
     vendorName,
-    createdAt: Date.now(),
   });
 };

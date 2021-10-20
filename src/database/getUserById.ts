@@ -1,6 +1,7 @@
-import { QueryInput } from 'aws-sdk/clients/dynamodb';
+import { QueryInput, QueryOutput } from 'aws-sdk/clients/dynamodb';
 import { getClient, toItem } from '../schema/base';
-export const getUserById = async (id: string): Promise<boolean> => {
+
+export const getUserById = async (id: string): Promise<QueryOutput> => {
   const client = getClient();
   const params: QueryInput = {
     KeyConditionExpression: 'PK = :userId and begins_with(SK,:meta)',
