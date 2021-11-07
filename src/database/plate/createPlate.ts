@@ -18,7 +18,7 @@ export const createPlate = async ({
   });
 
   const params: PutItemInput = {
-    TableName: `PLATES${process.env.TABLE_PREFIX}`,
+    TableName: `USERS${process.env.TABLE_PREFIX}`,
     Item: plate,
   };
 

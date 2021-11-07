@@ -24,3 +24,7 @@ export const createKey = (pk: string, sk: string) => {
 export const toItem = (data: any) => {
   return DynamoDB.Converter.marshall(data);
 };
+
+export const toJSON = (data: any) => {
+  return DynamoDB.Converter.unmarshall(data);
+};

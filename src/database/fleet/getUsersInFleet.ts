@@ -1,5 +1,5 @@
 import { fleetSchema } from '../../schema/fleetSchema';
-import { getClient } from '../../schema/base';
+import { getClient, toItem } from '../../schema/base';
 import { QueryInput } from 'aws-sdk/clients/dynamodb';
 
 export const getUsersInFleet = async (
@@ -10,10 +10,10 @@ export const getUsersInFleet = async (
 
   const params: QueryInput = {
     KeyConditionExpression: 'PK = :fleet AND begins_with(SK, :user)',
-    ExpressionAttributeValues: {
-      ':fleet': { S: `FLEET:${id}` },
-      ':user': { S: 'USER' },
-    },
+    ExpressionAttributeValues: toItem({
+      ':fleet': `FLEET:${id}`,
+      ':user': 'USER',
+    }),
     TableName: `USERS${process.env.TABLE_PREFIX}`,
   };
 

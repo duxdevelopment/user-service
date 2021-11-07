@@ -1,21 +1,16 @@
 import { QueryInput, QueryOutput } from 'aws-sdk/clients/dynamodb';
 import { getClient, toItem } from '../../schema/base';
 
-export const getPlateFromRecognition = async (
-  registration: string
-): Promise<QueryOutput> => {
+export const getUsersPlates = async (userId: string): Promise<QueryOutput> => {
   const client = getClient();
 
   const params: QueryInput = {
     TableName: `USERS${process.env.TABLE_PREFIX}`,
-    IndexName: 'GSI_1',
-    KeyConditionExpression: '#registration = :registration',
+    KeyConditionExpression: 'PK = :user AND begins_with(SK,:plate)',
     ExpressionAttributeValues: toItem({
-      ':registration': `REGO:${registration}`,
+      ':user': `USER:${userId}`,
+      ':plate': 'PLATE:',
     }),
-    ExpressionAttributeNames: {
-      '#registration': 'GSI_1_PK',
-    },
   };
 
   return client.query(params).promise();

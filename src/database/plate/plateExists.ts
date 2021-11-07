@@ -1,9 +1,7 @@
-import { QueryInput, QueryOutput } from 'aws-sdk/clients/dynamodb';
+import { QueryInput } from 'aws-sdk/clients/dynamodb';
 import { getClient, toItem } from '../../schema/base';
 
-export const getPlateFromRecognition = async (
-  registration: string
-): Promise<QueryOutput> => {
+export const plateExists = async (registration: string): Promise<boolean> => {
   const client = getClient();
 
   const params: QueryInput = {
@@ -18,5 +16,11 @@ export const getPlateFromRecognition = async (
     },
   };
 
-  return client.query(params).promise();
+  const checkPlate = await client.query(params).promise();
+
+  if (checkPlate.Count === 0) {
+    return false;
+  } else {
+    return true;
+  }
 };

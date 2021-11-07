@@ -3,6 +3,7 @@ import { Response } from '../../utils/lambda-response';
 import { createPlate } from '../../database/plate/createPlate';
 import { APIGatewayProxyEventHeaders } from 'aws-lambda';
 import jwt_decode from 'jwt-decode';
+import { plateExists } from '../../database/plate/plateExists';
 
 const createPlateHandler = async (
   event: AWSLambda.APIGatewayEvent
@@ -13,17 +14,24 @@ const createPlateHandler = async (
     const userId: string = decode['custom:userId'];
     const { registration, state, vehicleType } = JSON.parse(event.body!);
 
-    const plateDoc = await createPlate({
-      userId,
-      registration,
-      state,
-      vehicleType,
-    });
+    const alreadyExists = await plateExists(registration);
 
-    console.log(plateDoc);
+    if (!alreadyExists) {
+      const plateDoc = await createPlate({
+        userId,
+        registration,
+        state,
+        vehicleType,
+      });
 
-    return corsSuccessResponse({
-      message: 'Plate created',
+      console.log(plateDoc);
+
+      return corsSuccessResponse({
+        message: 'Plate created',
+      });
+    }
+    return corsErrorResponse({
+      message: 'Plate already exists',
     });
   } catch (err) {
     console.log(err);
