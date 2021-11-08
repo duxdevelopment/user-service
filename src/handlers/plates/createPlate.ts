@@ -24,10 +24,10 @@ const createPlateHandler = async (
         vehicleType,
       });
 
-      console.log(plateDoc);
+      console.log('PLATE CREATE', plateDoc);
 
       return corsSuccessResponse({
-        message: 'Plate created',
+        plate: plateDoc,
       });
     }
     return corsErrorResponse({

@@ -1,5 +1,9 @@
 import { DynamoDB } from 'aws-sdk';
 
+const {
+  Converter: { unmarshall, marshall },
+} = DynamoDB;
+
 let client: any = null;
 
 export const getClient = (): DynamoDB => {
@@ -22,9 +26,55 @@ export const createKey = (pk: string, sk: string) => {
 };
 
 export const toItem = (data: any) => {
-  return DynamoDB.Converter.marshall(data);
+  return marshall(data);
 };
 
 export const toJSON = (data: any) => {
-  return DynamoDB.Converter.unmarshall(data);
+  return unmarshall(data);
+};
+
+/**
+ * Update item in DynamoDB table
+ * @param {string} tableName // Name of the target table
+ * @param {object} key // Object containing target item key(s)
+ * @param {object} item // Object containing updates for target item
+ */
+
+export const updateItem = async (
+  tableName: string,
+  PK: string,
+  SK: string,
+  item: any
+) => {
+  const client = getClient();
+  const itemKeys = Object.keys(item);
+
+  const { Attributes } = await client
+    .updateItem({
+      TableName: tableName,
+      Key: toItem({ PK, SK }),
+      ReturnValues: 'ALL_NEW',
+      UpdateExpression: `SET ${itemKeys
+        .map((k, index) => {
+          console.log('UPDATE FIELD:', k);
+          return `#field${index} = :value${index}`;
+        })
+        .join(', ')}`,
+      ExpressionAttributeNames: itemKeys.reduce(
+        (accumulator, k, index) => ({ ...accumulator, [`#field${index}`]: k }),
+        {}
+      ),
+      ExpressionAttributeValues: toItem(
+        itemKeys.reduce(
+          (accumulator, k, index) => ({
+            ...accumulator,
+            [`:value${index}`]: item[k],
+          }),
+          {}
+        )
+      ),
+    })
+    .promise();
+
+  return unmarshall(Attributes!);
 };

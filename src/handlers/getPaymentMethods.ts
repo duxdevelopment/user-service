@@ -4,6 +4,7 @@ import { APIGatewayProxyEventHeaders } from 'aws-lambda';
 import Stripe from 'stripe';
 import jwt_decode from 'jwt-decode';
 import { getUserById } from '../database/getUserById';
+import { toJSON } from '../schema/base';
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2020-08-27',
@@ -19,7 +20,7 @@ const getPaymentDetails = async (
 
     const [user]: any = await getUserById(userId);
 
-    const { stripeId } = user;
+    const { stripeId } = toJSON(user);
 
     const paymentMethods = (
       await stripe.paymentMethods.list({

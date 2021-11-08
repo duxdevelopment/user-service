@@ -2,34 +2,39 @@ import { corsSuccessResponse, corsErrorResponse, runWarm } from '../../utils';
 import { Response } from '../../utils/lambda-response';
 import { APIGatewayProxyEventHeaders } from 'aws-lambda';
 import jwt_decode from 'jwt-decode';
-import { getUsersInFleet } from '../../database/fleet/getUsersInFleet';
-import { toJSON } from '../../schema/base';
+import { updateItem } from '../../schema/base';
 
-const getUsersInFleetHandler = async (
+const updatePlateHandler = async (
   event: AWSLambda.APIGatewayEvent
 ): Promise<Response> => {
   try {
     const headers: APIGatewayProxyEventHeaders = event.headers;
     const decode: any = jwt_decode(headers.Authorization!);
-    const userId = decode['custom:userId'];
+    const userId: string = decode['custom:userId'];
+    const { plateId, updateContent } = JSON.parse(event.body!);
 
-    const fleetUsers = await getUsersInFleet(userId);
+    console.log(event.body);
 
-    console.log(fleetUsers);
+    const update = await updateItem(
+      `USERS${process.env.TABLE_PREFIX}`,
+      `USER:${userId}`,
+      `PLATE:${plateId}`,
+      updateContent
+    );
+
+    console.log(update);
 
     return corsSuccessResponse({
-      fleetUsers: toJSON(fleetUsers),
+      message: 'plate updated',
     });
   } catch (err) {
     console.log(err);
+    return corsErrorResponse({
+      message: 'Error updating plate',
+    });
   }
-  const response = corsErrorResponse({
-    message: 'Error adding user to fleet',
-  });
-
-  return response;
 };
 
 // runWarm function handles pings from the scheduler so you don't
 // have to put that boilerplate in your function.
-export default runWarm(getUsersInFleetHandler);
+export default runWarm(updatePlateHandler);

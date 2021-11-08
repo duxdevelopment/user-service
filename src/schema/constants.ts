@@ -14,9 +14,5 @@ export const vehicleTypes = {
   TRUCK: 'TRUCK',
   MOTORCYCLE: 'MOTORCYCLE',
   BUS: 'BUS',
-  TRAM: 'TRAM',
-  TRAIN: 'TRAIN',
-  AIRPLANE: 'AIRPLANE',
-  BOAT: 'BOAT',
   OTHER: 'OTHER',
 };

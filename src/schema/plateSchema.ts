@@ -26,6 +26,7 @@ export const plateSchema = ({
     registration,
     GSI_1_PK: `REGO:${registration}`,
     GSI_1_SK: `STATUS:${isActive}`,
+    plateId,
     state,
     vehicleType,
     isActive,
