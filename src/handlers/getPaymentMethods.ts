@@ -28,12 +28,14 @@ const getPaymentDetails = async (
         type: 'card',
       })
     ).data.map((method) => {
+      const { id } = method;
       const { brand, exp_month, exp_year, last4 } = method.card!;
       const card = {
         brand,
         expMonth: exp_month,
         expYear: exp_year,
         last4,
+        id,
       };
       return card;
     });

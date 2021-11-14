@@ -152,6 +152,23 @@ functions:
           - dynamodb:PutItem
           - dynamodb:UpdateItem
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+  deletePlate:
+    handler: src/handlers/plates/deletePlate.default
+    events:
+      - http:
+          path: delete-plate
+          method: post
+          cors: true
+          authorizer:
+            arn: ${self:provider.environment.AUTH_ARN}
+            identitySource: method.request.header.Authorization
+            type: token
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:DeleteItem
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
   createPlate:
     handler: src/handlers/plates/createPlate.default
     events:
