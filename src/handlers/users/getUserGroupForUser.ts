@@ -1,6 +1,6 @@
-import { corsSuccessResponse, runWarm } from '../utils';
-import { Response } from '../utils/lambda-response';
-import { getUserGroupsForUser } from '../database/getUserGroupsForUser';
+import { corsSuccessResponse, runWarm } from '../../utils';
+import { Response } from '../../utils/lambda-response';
+import { getUserGroupsForUser } from '../../database/user/getUserGroupsForUser';
 
 const getPaymentDetails = async (): Promise<Response> => {
   const getGroups = await getUserGroupsForUser(

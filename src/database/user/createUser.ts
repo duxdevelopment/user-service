@@ -1,7 +1,7 @@
 import { PutItemInput } from 'aws-sdk/clients/dynamodb';
-import { fleetSchema } from '../schema/fleetSchema';
-import { userSchema } from '../schema/userSchema';
-import { getClient } from '../schema/base';
+import { fleetSchema } from '../../schema/fleetSchema';
+import { userSchema } from '../../schema/userSchema';
+import { getClient } from '../../schema/base';
 
 interface userInterface {
   id: string;

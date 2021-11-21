@@ -2,7 +2,7 @@ import { runWarm } from '../../utils';
 import { getPlateFromRecognition } from '../../database/plate/getPlateFromRecognition';
 import { SNS } from 'aws-sdk';
 import { PublishInput } from 'aws-sdk/clients/sns';
-import { getUserById } from '../../database/getUserById';
+import { getUserById } from '../../database/user/getUserById';
 
 const sns = new SNS({
   region: 'ap-southeast-2',

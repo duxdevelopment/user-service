@@ -1,15 +1,15 @@
-import { runWarm } from '../utils';
+import { runWarm } from '../../utils';
 import {
   corsErrorResponse,
   corsSuccessResponse,
   Response,
-} from '../utils/lambda-response';
+} from '../../utils/lambda-response';
 import { v4 as uuidv4 } from 'uuid';
-import { createUser } from '../database/createUser';
+import { createUser } from '../../database/user/createUser';
 import { createStripeUser } from './createStripeUser';
 import { Auth, Amplify } from 'aws-amplify';
-import awsmobile from '../amplifyConfig';
-import { checkEmail } from '../database/getUserByEmail';
+import awsmobile from '../../amplifyConfig';
+import { checkEmail } from '../../database/user/getUserByEmail';
 
 Amplify.configure(awsmobile);
 interface userInterface {
