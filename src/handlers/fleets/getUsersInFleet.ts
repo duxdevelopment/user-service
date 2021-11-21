@@ -3,7 +3,6 @@ import { Response } from '../../utils/lambda-response';
 import { APIGatewayProxyEventHeaders } from 'aws-lambda';
 import jwt_decode from 'jwt-decode';
 import { getUsersInFleet } from '../../database/fleet/getUsersInFleet';
-import { toJSON } from '../../schema/base';
 
 const getUsersInFleetHandler = async (
   event: AWSLambda.APIGatewayEvent
@@ -15,10 +14,8 @@ const getUsersInFleetHandler = async (
 
     const fleetUsers = await getUsersInFleet(userId);
 
-    console.log(fleetUsers);
-
     return corsSuccessResponse({
-      fleetUsers: toJSON(fleetUsers),
+      fleetUsers,
     });
   } catch (err) {
     console.log(err);

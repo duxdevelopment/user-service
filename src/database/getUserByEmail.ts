@@ -1,10 +1,7 @@
-import { userSchema } from '../schema/userSchema';
 import { getClient, toItem } from '../schema/base';
-import { QueryInput } from 'aws-sdk/clients/dynamodb';
+import { QueryInput, QueryOutput } from 'aws-sdk/clients/dynamodb';
 
-export const checkEmail = async (
-  email: string
-): Promise<[typeof userSchema]> => {
+export const checkEmail = async (email: string): Promise<QueryOutput> => {
   const client = getClient();
   console.log(email);
   const params: QueryInput = {

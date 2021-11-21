@@ -1,10 +1,7 @@
-import { fleetSchema } from '../../schema/fleetSchema';
-import { getClient, toItem } from '../../schema/base';
-import { QueryInput } from 'aws-sdk/clients/dynamodb';
+import { getClient, mapOutput, toItem } from '../../schema/base';
+import { QueryInput, QueryOutput } from 'aws-sdk/clients/dynamodb';
 
-export const getUsersInFleet = async (
-  id: string
-): Promise<[typeof fleetSchema]> => {
+export const getUsersInFleet = async (id: string): Promise<QueryOutput> => {
   console.log(id);
   const client = getClient();
 
@@ -21,13 +18,14 @@ export const getUsersInFleet = async (
     .query(params)
     .promise()
     .then((res: any) => {
+      console.log(res);
       if (res.Count > 0) {
-        return res.Items;
+        return mapOutput(res.Items);
       }
-      return null;
+      return [];
     })
     .catch((err) => {
       console.log(err);
-      return null;
+      return [];
     });
 };

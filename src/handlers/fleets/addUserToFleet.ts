@@ -3,7 +3,8 @@ import { Response } from '../../utils/lambda-response';
 import { APIGatewayProxyEventHeaders } from 'aws-lambda';
 import jwt_decode from 'jwt-decode';
 import { checkEmail } from '../../database/getUserByEmail';
-import { addUserToFleet } from '../../database/addUserToGroup';
+import { addUserToFleet } from '../../database/fleet/addUserToGroup';
+import { toOutput } from '../../schema/base';
 
 const addUserToFleetHandler = async (
   event: AWSLambda.APIGatewayEvent
@@ -24,7 +25,11 @@ const addUserToFleetHandler = async (
       });
     }
 
-    const addUser = await addUserToFleet(requestedUser.id, email, userId);
+    const addUser = await addUserToFleet(
+      toOutput(requestedUser.id),
+      email,
+      userId
+    );
 
     console.log(addUser);
 

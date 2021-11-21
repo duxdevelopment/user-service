@@ -89,15 +89,24 @@ functions:
           - dynamodb:PutItem
           - dynamodb:Query
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
-  notifyUserPlateRecognition:
-    handler: src/handlers/registerUser.default
+  getPlateFromRecognition:
+    handler: src/handlers/plates/getPlateFromRecognition.default
     events:
-      - sns: notify-user-plate-recognition-${self:provider.stage}
+      - sns: plate-service-${self:provider.stage}
     iamRoleStatements:
       - Effect: 'Allow'
         Action:
           - dynamodb:Query
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
+  notifyUserPlateRecognition:
+    handler: src/handlers/notifyUserPlateRecognition.default
+    events:
+      - sns: notify-user-plate-recognition-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:*
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
   getPaymentMethods:
     handler: src/handlers/getPaymentMethods.default
     events:

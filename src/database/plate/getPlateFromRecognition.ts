@@ -1,9 +1,10 @@
-import { QueryInput, QueryOutput } from 'aws-sdk/clients/dynamodb';
-import { getClient, toItem } from '../../schema/base';
+import { QueryInput } from 'aws-sdk/clients/dynamodb';
+import { plateSchemaInterface } from '../../schema/plateSchema';
+import { getClient, mapOutput, toItem } from '../../schema/base';
 
 export const getPlateFromRecognition = async (
   registration: string
-): Promise<QueryOutput> => {
+): Promise<Array<plateSchemaInterface>> => {
   const client = getClient();
 
   const params: QueryInput = {
@@ -18,5 +19,17 @@ export const getPlateFromRecognition = async (
     },
   };
 
-  return client.query(params).promise();
+  return client
+    .query(params)
+    .promise()
+    .then((res) => {
+      if (res.Count! > 0) {
+        return mapOutput(res.Items);
+      }
+      return [];
+    })
+    .catch((err) => {
+      console.log(err);
+      return [];
+    });
 };

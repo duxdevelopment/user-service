@@ -2,6 +2,7 @@ import { runWarm } from '../../utils';
 import { getPlateFromRecognition } from '../../database/plate/getPlateFromRecognition';
 import { SNS } from 'aws-sdk';
 import { PublishInput } from 'aws-sdk/clients/sns';
+import { getUserById } from '../../database/getUserById';
 
 const sns = new SNS({
   region: 'ap-southeast-2',
@@ -12,18 +13,18 @@ const getPlateFromRecognitionHandler = async (
 ): Promise<void> => {
   console.log(JSON.stringify(event));
 
-  const { results, cost } = JSON.parse(event.Records[0].Sns.Message);
+  const { results, purchase } = JSON.parse(event.Records[0].Sns.Message);
 
   await Promise.all(
     results.map(async (item: any) => {
-      const plate = await getPlateFromRecognition(item.plate);
+      const [plate] = await getPlateFromRecognition(item.plate);
 
-      if (plate.Count != 0) {
-        const msg = { plate: plate!.Items![0], cost };
+      if (plate) {
+        const [user] = await getUserById(plate.userId);
 
         const params: PublishInput = {
-          Message: JSON.stringify(msg),
-          TopicArn: process.env.PLATE_SERVICE_TOPIC_ARN,
+          Message: JSON.stringify({ plate, purchase, user }),
+          TopicArn: process.env.NOTIFY_USER_TOPIC_ARN,
         };
 
         await sns.publish(params).promise();

@@ -5,8 +5,12 @@ shared: &shared
   SNS_BASE_ARN: 'arn:aws:sns:ap-southeast-2:457286094131:'
   DYNAMO_BASE: 'arn:aws:dynamodb:ap-southeast-2:457286094131:table'
   USERS_TABLE: ${self:provider.environment.DYNAMO_BASE}/${self:provider.environment.TABLE_PREFIX}USERS
+  NOTIFY_USER_TOPIC: notify-user-plate-recognition-${self:provider.stage}
+  NOTIFY_USER_TOPIC_ARN: ${self:provider.environment.SNS_BASE_ARN}${self:provider.environment.NOTIFY_USER_TOPIC}
   USER_SERVICE_TOPIC: user-service-${self:provider.stage}
   USER_SERVICE_TOPIC_ARN: ${self:provider.environment.SNS_BASE_ARN}${self:provider.environment.USER_SERVICE_TOPIC}
+  PLATE_SERVICE_TOPIC: plate-service-${self:provider.stage}
+  PLATE_SERVICE_TOPIC_ARN: ${self:provider.environment.SNS_BASE_ARN}${self:provider.environment.PLATE_SERVICE_TOPIC}
 
 preProdShared: &preProdShared
   <<: *shared

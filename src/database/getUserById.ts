@@ -1,7 +1,11 @@
-import { QueryInput, QueryOutput } from 'aws-sdk/clients/dynamodb';
+import { QueryInput } from 'aws-sdk/clients/dynamodb';
+import { mapOutput } from '../schema/base';
+import { userSchemaInterface } from '../schema/userSchema';
 import { getClient, toItem } from '../schema/base';
 
-export const getUserById = async (id: string): Promise<QueryOutput> => {
+export const getUserById = async (
+  id: string
+): Promise<Array<userSchemaInterface>> => {
   const client = getClient();
   const params: QueryInput = {
     KeyConditionExpression: 'PK = :userId and begins_with(SK,:meta)',
@@ -17,12 +21,12 @@ export const getUserById = async (id: string): Promise<QueryOutput> => {
     .promise()
     .then((res: any) => {
       if (res.Count > 0) {
-        return res.Items;
+        return mapOutput(res.Items);
       }
-      return false;
+      return [];
     })
     .catch((err) => {
       console.log(err);
-      return true;
+      return [];
     });
 };

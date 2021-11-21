@@ -1,5 +1,5 @@
 import { QueryInput, QueryOutput } from 'aws-sdk/clients/dynamodb';
-import { getClient, toItem } from '../../schema/base';
+import { getClient, toItem, mapOutput } from '../../schema/base';
 
 export const getUsersPlates = async (userId: string): Promise<QueryOutput> => {
   const client = getClient();
@@ -13,5 +13,14 @@ export const getUsersPlates = async (userId: string): Promise<QueryOutput> => {
     }),
   };
 
-  return client.query(params).promise();
+  return client
+    .query(params)
+    .promise()
+    .then((res: any) => {
+      console.log(res);
+      if (res.Count > 0) {
+        return mapOutput(res.Items);
+      }
+      return [];
+    });
 };

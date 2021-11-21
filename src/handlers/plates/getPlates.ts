@@ -2,7 +2,6 @@ import { runWarm, corsSuccessResponse, Response } from '../../utils';
 import { getUsersPlates } from '../../database/plate/getUsersPlates';
 import { APIGatewayProxyEventHeaders } from 'aws-lambda';
 import jwt_decode from 'jwt-decode';
-import { toJSON } from '../../schema/base';
 
 const getPlates = async (
   event: AWSLambda.APIGatewayEvent
@@ -16,14 +15,7 @@ const getPlates = async (
   try {
     const plates = await getUsersPlates(userId);
 
-    const jsonPlates = plates.Items
-      ? plates.Items.map((plate: any) => {
-          console.log(plate);
-          return toJSON(plate);
-        })
-      : [];
-
-    return corsSuccessResponse({ plates: jsonPlates });
+    return corsSuccessResponse({ plates });
   } catch (error) {
     console.log(error);
     return corsSuccessResponse({

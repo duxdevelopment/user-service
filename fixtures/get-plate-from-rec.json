@@ -1,0 +1,22 @@
+{
+  "Records": [
+    {
+      "EventSource": "aws:sns",
+      "EventVersion": "1.0",
+      "EventSubscriptionArn": "arn:aws:sns:ap-southeast-2:457286094131:plate-recognition-staging:d0ffe4f5-1f01-4f93-a546-fcae6201a1a9",
+      "Sns": {
+        "Type": "Notification",
+        "MessageId": "db23b520-3f0e-57e3-8203-ef33d5bbd344",
+        "TopicArn": "arn:aws:sns:ap-southeast-2:457286094131:plate-recognition-staging",
+        "Subject": null,
+        "Message": "{\"purchase\":{\"products\":[{\"title\":\"UL95\",\"cost\":14999,\"quantity\":35},{\"title\":\"UL98\",\"cost\":17999,\"quantity\":30}]}, \"results\":[{\"plate\": \"ABC12345\"}]}",
+        "Timestamp": "2021-11-21T06:34:29.412Z",
+        "SignatureVersion": "1",
+        "Signature": "euP0FykmW11qonCWnaTqoYtg97fITjjhJHlRdE6Lxmwpa/vpkIWAwqWR2bYvXvu4Mp6o15+CFTxv+AAeUG+KVOwwaR0MmGcmNKMA7tSnOQ58yVAdW2jNnaQ90K0CPTZnLf17KJ8Io58IFvj0YkklG5ShenhbSDNBeONQGciHEgIu5h1KIrVn7I6+/equOKoFeUpkrdpvEi6k8CnC1/+wLgqS5LwQUbnCTlMs7sKeS1i3hgLHeCk+8YuP4GcmzFmeNWxJPgNESK6U6avi7R1TRU5XOITm31FjiJR7hhxslm6NYasnyK+jL0PzJ7BVKzAKRzJpvYJPrJ/BMXQw8j6lQg==",
+        "SigningCertUrl": "https://sns.ap-southeast-2.amazonaws.com/SimpleNotificationService-7ff5318490ec183fbaddaa2a969abfda.pem",
+        "UnsubscribeUrl": "https://sns.ap-southeast-2.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:ap-southeast-2:457286094131:plate-recognition-staging:d0ffe4f5-1f01-4f93-a546-fcae6201a1a9",
+        "MessageAttributes": {}
+      }
+    }
+  ]
+}

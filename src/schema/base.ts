@@ -1,7 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
 
 const {
-  Converter: { unmarshall, marshall },
+  Converter: { unmarshall, marshall, output },
 } = DynamoDB;
 
 let client: any = null;
@@ -25,6 +25,13 @@ export const createKey = (pk: string, sk: string) => {
   };
 };
 
+export const mapOutput = (item: any) => {
+  return item.map((i: any) => unmarshall(i));
+};
+
+export const toOutput = (data: any) => {
+  return output(data);
+};
 export const toItem = (data: any) => {
   return marshall(data);
 };

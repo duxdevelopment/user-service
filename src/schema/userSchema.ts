@@ -1,6 +1,6 @@
 import { createKey, toItem } from './base';
 
-interface userSchemaInterface {
+export interface userSchemaInterface {
   id: string;
   firstName: string;
   stripeId: string;
