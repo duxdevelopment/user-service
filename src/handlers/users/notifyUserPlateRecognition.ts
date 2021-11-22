@@ -1,5 +1,5 @@
-import { runWarm } from '../utils';
-import { getUserById } from '../database/getUserById';
+import { runWarm } from '../../utils';
+// import { getUserById } from '../../database/user/getUserById';
 // import { SNS } from 'aws-sdk';
 
 // const sns = new SNS({
@@ -11,13 +11,13 @@ const notifyUserPlateRecognition = async (
 ): Promise<void> => {
   console.log(JSON.stringify(event));
 
-  const { Document } = JSON.parse(event.Records[0].Sns.Message);
+  const { plate, user, purchase } = JSON.parse(event.Records[0].Sns.Message);
 
-  const { userId } = Document;
-
-  await getUserById(userId);
+  console.log(plate, user, purchase);
 
   //get user number from table
+
+  // create transaction
 };
 
 export default runWarm(notifyUserPlateRecognition);

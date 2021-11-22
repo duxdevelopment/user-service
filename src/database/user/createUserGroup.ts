@@ -1,6 +1,6 @@
 import { PutItemInput } from 'aws-sdk/clients/dynamodb';
-import { getClient } from '../schema/base';
-import { fleetSchema } from '../schema/fleetSchema';
+import { getClient } from '../../schema/base';
+import { fleetSchema } from '../../schema/fleetSchema';
 
 export const createUserGroup = async (id: string, fleetType: string) => {
   const client = getClient();

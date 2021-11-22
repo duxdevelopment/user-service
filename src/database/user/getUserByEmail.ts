@@ -1,4 +1,4 @@
-import { getClient, toItem } from '../schema/base';
+import { getClient, toItem } from '../../schema/base';
 import { QueryInput, QueryOutput } from 'aws-sdk/clients/dynamodb';
 
 export const checkEmail = async (email: string): Promise<QueryOutput> => {

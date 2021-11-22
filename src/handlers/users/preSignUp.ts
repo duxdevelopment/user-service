@@ -1,4 +1,4 @@
-import { runWarm } from '../utils';
+import { runWarm } from '../../utils';
 
 const preSignUp = (event: any, context: any): any => {
   event.response.autoConfirmUser = true;

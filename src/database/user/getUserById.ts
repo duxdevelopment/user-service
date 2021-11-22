@@ -1,7 +1,7 @@
 import { QueryInput } from 'aws-sdk/clients/dynamodb';
-import { mapOutput } from '../schema/base';
-import { userSchemaInterface } from '../schema/userSchema';
-import { getClient, toItem } from '../schema/base';
+import { mapOutput } from '../../schema/base';
+import { userSchemaInterface } from '../../schema/userSchema';
+import { getClient, toItem } from '../../schema/base';
 
 export const getUserById = async (
   id: string

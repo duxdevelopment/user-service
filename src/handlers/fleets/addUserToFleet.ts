@@ -2,7 +2,7 @@ import { corsSuccessResponse, corsErrorResponse, runWarm } from '../../utils';
 import { Response } from '../../utils/lambda-response';
 import { APIGatewayProxyEventHeaders } from 'aws-lambda';
 import jwt_decode from 'jwt-decode';
-import { checkEmail } from '../../database/getUserByEmail';
+import { checkEmail } from '../../database/user/getUserByEmail';
 import { addUserToFleet } from '../../database/fleet/addUserToGroup';
 import { toOutput } from '../../schema/base';
 

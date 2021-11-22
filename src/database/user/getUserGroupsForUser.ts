@@ -1,5 +1,5 @@
 import { QueryInput } from 'aws-sdk/clients/dynamodb';
-import { getClient, toItem } from '../schema/base';
+import { getClient, toItem } from '../../schema/base';
 
 export const getUserGroupsForUser = async (userId: string) => {
   const client = getClient();
