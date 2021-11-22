@@ -1,15 +1,9 @@
 service: user-service
 
-package:
-  individually: true
-  exclude:
-    - ./logo.png
-
 provider:
   name: aws
   runtime: nodejs12.x
-  profile: phalt
-  stage: ${opt:stage, env:STAGE, self:custom.defaultStage}
+  stage: ${opt:stage}
   region: ap-southeast-2
   environment: ${self:custom.environment.currentSettings}
 
@@ -37,6 +31,51 @@ custom:
 functions:
   preSignUp:
     handler: src/handlers/preSignUp.default
+  createTable:
+    handler: src/schema/tableSchema.handler
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:CreateTable
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+  getUserGroups:
+    handler: src/handlers/getUserGroupForUser.default
+    events:
+      - http:
+          path: fuck-you
+          method: get
+          cors: true
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:PutItem
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+  getFleetUsers:
+    handler: src/handlers/fleets/getUsersInFleet.default
+    events:
+      - http:
+          path: fleet-users
+          method: get
+          cors: true
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+  addUserToFleet:
+    handler: src/handlers/fleets/addUserToFleet.default
+    events:
+      - http:
+          path: add-user-to-fleet
+          method: post
+          cors: true
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:PutItem
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
   registerUser:
     handler: src/handlers/registerUser.default
     events:
@@ -48,34 +87,133 @@ functions:
       - Effect: 'Allow'
         Action:
           - dynamodb:PutItem
-          - dynamodb:CreateTable
           - dynamodb:Query
-        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
-  notifyUserPlateRecognition:
-    handler: src/handlers/registerUser.default
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+  getPlateFromRecognition:
+    handler: src/handlers/plates/getPlateFromRecognition.default
     events:
-      - sns: notify-user-plate-recognition-${self:provider.stage}
+      - sns: plate-service-${self:provider.stage}
     iamRoleStatements:
       - Effect: 'Allow'
         Action:
           - dynamodb:Query
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
-  # getTransactionsByUser:
-  #   handler: src/handlers/getTransactionsByUser.default
-  #   events:
-  #     - http:
-  #         path: transactions/{userId}
-  #         method: get
-  #         cors: true
-  #         # authorizer:
-  #         #   arn: ${self:custom.environment.AUTH_ARN}
-  # iamRoleStatements:
-  #   - Effect: 'Allow'
-  #     Action:
-  #       - dynamodb:Query
-  #       - dynamodb:GetItem
-  #       - dynamodb:CreateTable
-  #     Resource: ${self:custom.environment.USER_TABLE}/index/userIndex
+  notifyUserPlateRecognition:
+    handler: src/handlers/notifyUserPlateRecognition.default
+    events:
+      - sns: notify-user-plate-recognition-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:*
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+  getPaymentMethods:
+    handler: src/handlers/getPaymentMethods.default
+    events:
+      - http:
+          path: get-payment-methods
+          method: get
+          cors: true
+          authorizer:
+            arn: ${self:provider.environment.AUTH_ARN}
+            identitySource: method.request.header.Authorization
+            type: token
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:Query
+          - dynamodb:Scan
+          - dynamodb:GetItem
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+  getPlates:
+    handler: src/handlers/plates/getPlates.default
+    events:
+      - http:
+          path: plates
+          method: get
+          cors: true
+          authorizer:
+            arn: ${self:provider.environment.AUTH_ARN}
+            identitySource: method.request.header.Authorization
+            type: token
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+  updatePlate:
+    handler: src/handlers/plates/updatePlate.default
+    events:
+      - http:
+          path: update-plate
+          method: post
+          cors: true
+          authorizer:
+            arn: ${self:provider.environment.AUTH_ARN}
+            identitySource: method.request.header.Authorization
+            type: token
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:PutItem
+          - dynamodb:UpdateItem
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+  deletePlate:
+    handler: src/handlers/plates/deletePlate.default
+    events:
+      - http:
+          path: delete-plate
+          method: post
+          cors: true
+          authorizer:
+            arn: ${self:provider.environment.AUTH_ARN}
+            identitySource: method.request.header.Authorization
+            type: token
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:DeleteItem
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+  createPlate:
+    handler: src/handlers/plates/createPlate.default
+    events:
+      - http:
+          path: create-plate
+          method: post
+          cors: true
+          authorizer:
+            arn: ${self:provider.environment.AUTH_ARN}
+            identitySource: method.request.header.Authorization
+            type: token
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:PutItem
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+  addPaymentMethod:
+    handler: src/handlers/addPaymentMethod.default
+    events:
+      - http:
+          path: add-payment-method
+          method: post
+          cors: true
+          authorizer:
+            arn: ${self:provider.environment.AUTH_ARN}
+            identitySource: method.request.header.Authorization
+            type: token
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:Query
+          - dynamodb:Scan
+          - dynamodb:GetItem
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
 
 plugins:
   - serverless-webpack
