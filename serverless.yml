@@ -30,7 +30,7 @@ custom:
 
 functions:
   preSignUp:
-    handler: src/handlers/preSignUp.default
+    handler: src/handlers/users/preSignUp.default
   createTable:
     handler: src/schema/tableSchema.handler
     iamRoleStatements:
