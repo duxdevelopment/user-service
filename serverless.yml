@@ -39,7 +39,7 @@ functions:
           - dynamodb:CreateTable
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
   getUserGroups:
-    handler: src/handlers/getUserGroupForUser.default
+    handler: src/handlers/users/getUserGroupForUser.default
     events:
       - http:
           path: fuck-you
@@ -77,7 +77,7 @@ functions:
           - dynamodb:Query
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
   registerUser:
-    handler: src/handlers/registerUser.default
+    handler: src/handlers/users/registerUser.default
     events:
       - http:
           path: register
@@ -99,7 +99,7 @@ functions:
           - dynamodb:Query
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_PREFIX}*'
   notifyUserPlateRecognition:
-    handler: src/handlers/notifyUserPlateRecognition.default
+    handler: src/handlers/users/notifyUserPlateRecognition.default
     events:
       - sns: notify-user-plate-recognition-${self:provider.stage}
     iamRoleStatements:
@@ -108,7 +108,7 @@ functions:
           - dynamodb:*
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
   getPaymentMethods:
-    handler: src/handlers/getPaymentMethods.default
+    handler: src/handlers/users/getPaymentMethods.default
     events:
       - http:
           path: get-payment-methods
@@ -194,9 +194,10 @@ functions:
       - Effect: 'Allow'
         Action:
           - dynamodb:PutItem
+          - dynamodb:Query
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
   addPaymentMethod:
-    handler: src/handlers/addPaymentMethod.default
+    handler: src/handlers/users/addPaymentMethod.default
     events:
       - http:
           path: add-payment-method

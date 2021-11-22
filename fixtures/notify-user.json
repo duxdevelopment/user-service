@@ -1,0 +1,22 @@
+{
+  "Records": [
+    {
+      "EventSource": "aws:sns",
+      "EventVersion": "1.0",
+      "EventSubscriptionArn": "arn:aws:sns:ap-southeast-2:457286094131:notify-user-plate-recognition-staging:e542f360-8ad5-4785-9e61-4f5d3467facd",
+      "Sns": {
+        "Type": "Notification",
+        "MessageId": "54598480-f48f-5b46-89c5-de94f1e05dfb",
+        "TopicArn": "arn:aws:sns:ap-southeast-2:457286094131:notify-user-plate-recognition-staging",
+        "Subject": null,
+        "Message": "{\"plate\":{\"entityType\":\"plate\",\"plateId\":\"4052e4bf-6a22-4c66-9b36-73769ff1fe02\",\"GSI_1_SK\":\"STATUS:true\",\"createdAt\":1637470726099,\"vehicleType\":\"OTHER\",\"GSI_1_PK\":\"REGO:ABC12345\",\"state\":\"SA\",\"isActive\":true,\"userId\":\"c5494f89-a994-479a-b46d-264dc0aa8871\",\"SK\":\"PLATE:4052e4bf-6a22-4c66-9b36-73769ff1fe02\",\"PK\":\"USER:c5494f89-a994-479a-b46d-264dc0aa8871\",\"registration\":\"ABC12345\"},\"purchase\":{\"products\":[{\"title\":\"UL95\",\"cost\":14999,\"quantity\":35},{\"title\":\"UL98\",\"cost\":17999,\"quantity\":30}]},\"user\":{\"phoneNumber\":\"0400400400\",\"entityType\":\"user\",\"lastName\":\"pauline\",\"SK\":\"META:c5494f89-a994-479a-b46d-264dc0aa8871\",\"stripeId\":\"cus_KGbZCYp9rqZPXZ\",\"PK\":\"USER:c5494f89-a994-479a-b46d-264dc0aa8871\",\"email\":\"joshua+14@josh.com\",\"GSI_1_PK\":\"EMAIL:joshua+14@josh.com\",\"firstName\":\"joshua\"}}",
+        "Timestamp": "2021-11-21T08:28:31.095Z",
+        "SignatureVersion": "1",
+        "Signature": "Xnwr/hrPe9ZW1RGoypn+6j/Fqi4dKcNJhGWnS25uHqg5AihdZPT2mw0zaZ7sDaNDDYthR8SQu0QlGfVwxn7hvqMfzu0JfiuK55XYNQ4518SPZ4q/82Xf2ppMsU2l0rJnmg1jPfo3xogoABQT0wNAyO2nEpumivGiZ10nx6YL8jkDacnVOIjoxR0u4+Hvcsg9FZOZfcACMg+SCJhrcDwjiEXdXt3tG0MRBqqBFiky7kS0QKH1KLDL1A9M8IyaSoZjOWuQPCY36QNlJgahCvsOf313v47bYQfx/0M4Bs+vQ9DAZX6cZrHu1r0N5KHKWNS9wzoTS7vjp+eMJURqDiAB9A==",
+        "SigningCertUrl": "https://sns.ap-southeast-2.amazonaws.com/SimpleNotificationService-7ff5318490ec183fbaddaa2a969abfda.pem",
+        "UnsubscribeUrl": "https://sns.ap-southeast-2.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:ap-southeast-2:457286094131:notify-user-plate-recognition-staging:e542f360-8ad5-4785-9e61-4f5d3467facd",
+        "MessageAttributes": {}
+      }
+    }
+  ]
+}
