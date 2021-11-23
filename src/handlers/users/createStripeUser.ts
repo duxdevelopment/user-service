@@ -4,7 +4,7 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2020-08-27',
 });
 
-const freePlan = 'price_1JywJ0G1ixT53HofH7ckAfNe';
+const freePlan = process.env.STRIPE_BASIC_SUB;
 
 interface stripeUser {
   firstName: string;

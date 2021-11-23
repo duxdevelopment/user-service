@@ -38,6 +38,7 @@ const getUserInfo = async (
       id: subscription.id,
       plan: {
         id: subscription.plan.id,
+        active: subscription.plan.active,
         amount: subscription.plan.amount,
         currency: subscription.plan.currency,
         interval: subscription.plan.interval,
