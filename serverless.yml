@@ -196,6 +196,23 @@ functions:
           - dynamodb:PutItem
           - dynamodb:Query
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
+  setDefaultPaumentMethod:
+    handler: src/handlers/users/setDefaultPaymentMethod.default
+    events:
+      - http:
+          path: set-default-payment-method/{paymentMethod}
+          method: post
+          cors: true
+          authorizer:
+            arn: ${self:provider.environment.AUTH_ARN}
+            identitySource: method.request.header.Authorization
+            type: token
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
   addPaymentMethod:
     handler: src/handlers/users/addPaymentMethod.default
     events:
