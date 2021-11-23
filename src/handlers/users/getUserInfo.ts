@@ -29,12 +29,30 @@ const getUserInfo = async (
 
     const subscriptions = await stripe.subscriptions.list({
       customer: stripeId,
+      expand: ['data.plan.product'],
     });
+
+    const mappedSubscriptions = subscriptions.data.map((subscription: any) => ({
+      current_period_end: subscription.current_period_end,
+      current_period_start: subscription.current_period_start,
+      id: subscription.id,
+      plan: {
+        id: subscription.plan.id,
+        amount: subscription.plan.amount,
+        currency: subscription.plan.currency,
+        interval: subscription.plan.interval,
+        interval_count: subscription.plan.interval_count,
+        product: {
+          id: subscription.plan.product.id,
+          name: subscription.plan.product.name,
+        },
+      },
+    }));
 
     return corsSuccessResponse({
       user: {
         ...user,
-        subscriptions: subscriptions.data,
+        subscriptions: mappedSubscriptions,
       },
     });
   } catch (err) {
