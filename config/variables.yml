@@ -12,23 +12,16 @@ shared: &shared
   PLATE_SERVICE_TOPIC: plate-service-${self:provider.stage}
   PLATE_SERVICE_TOPIC_ARN: ${self:provider.environment.SNS_BASE_ARN}${self:provider.environment.PLATE_SERVICE_TOPIC}
 
-preProdShared: &preProdShared
-  <<: *shared
-
 stages:
-  dev:
-    <<: *preProdShared
-    TABLE_PREFIX: -STAGING
-    STRIPE_SECRET_KEY: ${ssm:STRIPE_TEST_SECRET_KEY}
-    STRIPE_PUBLIC_KEY: ${ssm:STRIPE_TEST_PUBLIC_KEY}
-    STRIPE_BASIC_SUB: ${ssm:STRIPE_TEST_BASIC_SUB}
-
   staging:
-    <<: *preProdShared
+    <<: *shared
     TABLE_PREFIX: -STAGING
     STRIPE_SECRET_KEY: ${ssm:STRIPE_TEST_SECRET_KEY}
     STRIPE_PUBLIC_KEY: ${ssm:STRIPE_TEST_PUBLIC_KEY}
     STRIPE_BASIC_SUB: ${ssm:STRIPE_TEST_BASIC_SUB}
+    AWS_USER_POOL_ID: 'ap-southeast-2_wAg6LUZe9'
+    AWS_USER_POOL_WEB_CLIENT_ID: '15s4e8t2djnsbfdddmganjbrvt'
+    AWS_COGNITO_DOMAIN: 'https://phalt-staging.auth.ap-southeast-2.amazoncognito.com'
 
   prod: &prod
     <<: *shared
@@ -36,3 +29,6 @@ stages:
     STRIPE_SECRET_KEY: ${ssm:STRIPE_SECRET_KEY}
     STRIPE_PUBLIC_KEY: ${ssm:STRIPE_PUBLIC_KEY}
     STRIPE_BASIC_SUB: ${ssm:STRIPE_BASIC_SUB}
+    AWS_USER_POOL_ID: 'ap-southeast-2_G3sdlJ96i'
+    AWS_USER_POOL_WEB_CLIENT_ID: '208pouqr34fla9vjmpd9iq85ae'
+    AWS_COGNITO_DOMAIN: 'https://phalt.auth.ap-southeast-2.amazoncognito.com'

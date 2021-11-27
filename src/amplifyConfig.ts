@@ -1,10 +1,10 @@
 const awsmobile = {
   aws_project_region: 'ap-southeast-2',
   aws_cognito_region: 'ap-southeast-2',
-  aws_user_pools_id: 'ap-southeast-2_G3sdlJ96i',
-  aws_user_pools_web_client_id: '208pouqr34fla9vjmpd9iq85ae',
+  aws_user_pools_id: process.env.USER_POOL_ID,
+  aws_user_pools_web_client_id: process.env.USER_POOL_WEB_CLIENT_ID,
   oauth: {
-    domain: 'phalt.auth.ap-southeast-2.amazoncognito.com',
+    domain: process.env.AWS_COGNITO_DOMAIN,
   },
 };
 
