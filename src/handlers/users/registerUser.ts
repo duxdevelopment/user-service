@@ -12,6 +12,7 @@ import awsmobile from '../../amplifyConfig';
 import { checkEmail } from '../../database/user/getUserByEmail';
 
 Amplify.configure(awsmobile);
+
 interface userInterface {
   firstName: string;
   lastName: string;
