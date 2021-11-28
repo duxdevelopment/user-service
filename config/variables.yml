@@ -1,7 +1,6 @@
 currentSettings: ${self:custom.environment.stages.${self:provider.stage}}
 
 shared: &shared
-  AUTH_ARN: arn:aws:cognito-idp:ap-southeast-2:457286094131:userpool/ap-southeast-2_G3sdlJ96i
   SNS_BASE_ARN: 'arn:aws:sns:ap-southeast-2:457286094131:'
   DYNAMO_BASE: 'arn:aws:dynamodb:ap-southeast-2:457286094131:table'
   USERS_TABLE: ${self:provider.environment.DYNAMO_BASE}/${self:provider.environment.TABLE_PREFIX}USERS
@@ -16,9 +15,11 @@ stages:
   staging:
     <<: *shared
     TABLE_PREFIX: -STAGING
+    RECOGNITION_IMAGE_BUCKET: plate-recognitions-staging
     STRIPE_SECRET_KEY: ${ssm:STRIPE_TEST_SECRET_KEY}
     STRIPE_PUBLIC_KEY: ${ssm:STRIPE_TEST_PUBLIC_KEY}
     STRIPE_BASIC_SUB: ${ssm:STRIPE_TEST_BASIC_SUB}
+    AUTH_ARN: arn:aws:cognito-idp:ap-southeast-2:457286094131:userpool/ap-southeast-2_wAg6LUZe9
     USER_POOL_ID: 'ap-southeast-2_wAg6LUZe9'
     USER_POOL_WEB_CLIENT_ID: '32qo3mns6ifl73champ5gnce1q'
     AWS_COGNITO_DOMAIN: 'https://phalt-staging.auth.ap-southeast-2.amazoncognito.com'
@@ -26,7 +27,9 @@ stages:
   prod: &prod
     <<: *shared
     TABLE_PREFIX: -PROD
+    AUTH_ARN: arn:aws:cognito-idp:ap-southeast-2:457286094131:userpool/ap-southeast-2_G3sdlJ96i
     STRIPE_SECRET_KEY: ${ssm:STRIPE_SECRET_KEY}
+    RECOGNITION_IMAGE_BUCKET: plate-recognitions-prod
     STRIPE_PUBLIC_KEY: ${ssm:STRIPE_PUBLIC_KEY}
     STRIPE_BASIC_SUB: ${ssm:STRIPE_BASIC_SUB}
     USER_POOL_ID: 'ap-southeast-2_G3sdlJ96i'
