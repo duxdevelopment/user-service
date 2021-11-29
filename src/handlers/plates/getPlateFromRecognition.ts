@@ -18,9 +18,12 @@ const getPlateFromRecognitionHandler = async (
 ): Promise<void> => {
   console.log(JSON.stringify(event));
 
-  const { recognition, purchase, image } = JSON.parse(
-    event.Records[0].Sns.Message
-  );
+  const {
+    recognition,
+    purchase,
+    recognitionPhoto,
+    recognitionResults,
+  } = JSON.parse(event.Records[0].Sns.Message);
 
   const [plate] = await getPlateFromRecognition(recognition);
 
@@ -33,7 +36,7 @@ const getPlateFromRecognitionHandler = async (
       .putObject({
         Bucket: process.env.RECOGNITION_IMAGE_BUCKET!,
         Key: `${user.id}/${s3ImageKey}`,
-        Body: image,
+        Body: recognitionPhoto,
         ContentEncoding: 'base64',
         ContentType: 'image/jpeg',
       })
@@ -42,7 +45,13 @@ const getPlateFromRecognitionHandler = async (
     console.log('IMAGE SAVED TO S3', saveToS3);
 
     const params: PublishInput = {
-      Message: JSON.stringify({ plate, purchase, user, s3ImageKey }),
+      Message: JSON.stringify({
+        plate,
+        purchase,
+        user,
+        s3ImageKey,
+        recognitionResults,
+      }),
       TopicArn: process.env.NOTIFY_USER_TOPIC_ARN,
     };
 
