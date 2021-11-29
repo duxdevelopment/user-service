@@ -9,13 +9,13 @@ shared: &shared
   USER_SERVICE_TOPIC: user-service-${self:provider.stage}
   USER_SERVICE_TOPIC_ARN: ${self:provider.environment.SNS_BASE_ARN}${self:provider.environment.USER_SERVICE_TOPIC}
   PLATE_SERVICE_TOPIC: plate-service-${self:provider.stage}
+  RECOGNITION_IMAGE_BUCKET: plate-recognitions-${self:provider.stage}
   PLATE_SERVICE_TOPIC_ARN: ${self:provider.environment.SNS_BASE_ARN}${self:provider.environment.PLATE_SERVICE_TOPIC}
 
 stages:
   staging:
     <<: *shared
     TABLE_PREFIX: -STAGING
-    RECOGNITION_IMAGE_BUCKET: plate-recognitions-staging
     STRIPE_SECRET_KEY: ${ssm:STRIPE_TEST_SECRET_KEY}
     STRIPE_PUBLIC_KEY: ${ssm:STRIPE_TEST_PUBLIC_KEY}
     STRIPE_BASIC_SUB: ${ssm:STRIPE_TEST_BASIC_SUB}
@@ -29,7 +29,6 @@ stages:
     TABLE_PREFIX: -PROD
     AUTH_ARN: arn:aws:cognito-idp:ap-southeast-2:457286094131:userpool/ap-southeast-2_G3sdlJ96i
     STRIPE_SECRET_KEY: ${ssm:STRIPE_SECRET_KEY}
-    RECOGNITION_IMAGE_BUCKET: plate-recognitions-prod
     STRIPE_PUBLIC_KEY: ${ssm:STRIPE_PUBLIC_KEY}
     STRIPE_BASIC_SUB: ${ssm:STRIPE_BASIC_SUB}
     USER_POOL_ID: 'ap-southeast-2_G3sdlJ96i'

@@ -31,11 +31,13 @@ const getPlateFromRecognitionHandler = async (
 
     const s3ImageKey = v4();
 
+    const decodedImage = Buffer.from(recognitionPhoto, 'base64');
+
     const saveToS3 = await s3
       .putObject({
         Bucket: process.env.RECOGNITION_IMAGE_BUCKET!,
-        Key: `${user.id}/${s3ImageKey}`,
-        Body: recognitionPhoto,
+        Key: `${user.id}/${s3ImageKey}.jpeg`,
+        Body: decodedImage,
         ContentEncoding: 'base64',
         ContentType: 'image/jpeg',
       })
