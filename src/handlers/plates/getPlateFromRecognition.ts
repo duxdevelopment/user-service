@@ -18,17 +18,16 @@ const getPlateFromRecognitionHandler = async (
 ): Promise<void> => {
   console.log(JSON.stringify(event));
 
-  const {
-    recognition,
-    purchase,
-    recognitionPhoto,
-    recognitionResults,
-  } = JSON.parse(event.Records[0].Sns.Message);
+  const { purchase, recognitionPhoto, recognitionResults } = JSON.parse(
+    event.Records[0].Sns.Message
+  );
 
-  const [plate] = await getPlateFromRecognition(recognition);
+  const { plate } = recognitionResults;
 
-  if (plate) {
-    const [user] = await getUserById(plate.userId);
+  const [savedPlate] = await getPlateFromRecognition(plate);
+
+  if (savedPlate) {
+    const [user] = await getUserById(savedPlate.userId);
 
     const s3ImageKey = v4();
 
@@ -49,6 +48,7 @@ const getPlateFromRecognitionHandler = async (
         plate,
         purchase,
         user,
+        savedPlate,
         s3ImageKey,
         recognitionResults,
       }),
