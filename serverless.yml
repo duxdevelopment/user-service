@@ -92,7 +92,7 @@ functions:
   getPlateFromRecognition:
     handler: src/handlers/plates/getPlateFromRecognition.default
     events:
-      - sns: plate-service-${self:provider.stage}
+      - sns: plate-recognition-${self:provider.stage}
     iamRoleStatements:
       - Effect: 'Allow'
         Action:
