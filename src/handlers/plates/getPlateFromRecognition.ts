@@ -18,22 +18,26 @@ const getPlateFromRecognitionHandler = async (
 ): Promise<void> => {
   console.log(JSON.stringify(event));
 
-  const { recognition, purchase, image } = JSON.parse(
+  const { purchase, recognitionPhoto, recognitionResults } = JSON.parse(
     event.Records[0].Sns.Message
   );
 
-  const [plate] = await getPlateFromRecognition(recognition);
+  const { plate } = recognitionResults;
 
-  if (plate) {
-    const [user] = await getUserById(plate.userId);
+  const [savedPlate] = await getPlateFromRecognition(plate);
+
+  if (savedPlate) {
+    const [user] = await getUserById(savedPlate.userId);
 
     const s3ImageKey = v4();
+
+    const decodedImage = Buffer.from(recognitionPhoto, 'base64');
 
     const saveToS3 = await s3
       .putObject({
         Bucket: process.env.RECOGNITION_IMAGE_BUCKET!,
-        Key: `${user.id}/${s3ImageKey}`,
-        Body: image,
+        Key: `${user.id}/${s3ImageKey}.jpeg`,
+        Body: decodedImage,
         ContentEncoding: 'base64',
         ContentType: 'image/jpeg',
       })
@@ -42,7 +46,14 @@ const getPlateFromRecognitionHandler = async (
     console.log('IMAGE SAVED TO S3', saveToS3);
 
     const params: PublishInput = {
-      Message: JSON.stringify({ plate, purchase, user, s3ImageKey }),
+      Message: JSON.stringify({
+        plate,
+        purchase,
+        user,
+        savedPlate,
+        s3ImageKey,
+        recognitionResults,
+      }),
       TopicArn: process.env.NOTIFY_USER_TOPIC_ARN,
     };
 
