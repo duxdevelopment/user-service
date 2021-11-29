@@ -13,7 +13,7 @@ const getPlates = async (
   const userId: string = decode['custom:userId'];
   const { plateId } = event.pathParameters!;
 
-  console.log(userId);
+  console.log('USERID:', userId);
 
   // keep user ID and update to make sure they have permission to view this plate
 

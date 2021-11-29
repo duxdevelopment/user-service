@@ -9,20 +9,23 @@ export const getPlateById = async (
 
   const params: QueryInput = {
     TableName: `USERS${process.env.TABLE_PREFIX}`,
-    IndexName: 'GSI_1',
+    IndexName: 'invertedIndex',
     KeyConditionExpression: '#registration = :registration',
     ExpressionAttributeValues: toItem({
-      ':registration': `REGO:${registration}`,
+      ':registration': `PLATE:${registration}`,
     }),
     ExpressionAttributeNames: {
-      '#registration': 'GSI_1_PK',
+      '#registration': 'SK',
     },
   };
 
   const plate = await client.query(params).promise();
 
-  if (plate.Count === 0) {
-    return mapOutput(plate);
+  console.log(plate);
+
+  if (plate.Count! > 0) {
+    console.log(plate);
+    return mapOutput(plate.Items);
   } else {
     return null;
   }
