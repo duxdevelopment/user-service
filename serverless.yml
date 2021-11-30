@@ -149,7 +149,7 @@ functions:
     iamRoleStatements:
       - Effect: 'Allow'
         Action:
-          - dynamodb:Quer
+          - dynamodb:Query
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
   getPlates:
     handler: src/handlers/plates/getPlates.default
