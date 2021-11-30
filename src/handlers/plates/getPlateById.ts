@@ -1,4 +1,9 @@
-import { runWarm, corsSuccessResponse, Response } from '../../utils';
+import {
+  runWarm,
+  corsSuccessResponse,
+  Response,
+  corsErrorResponse,
+} from '../../utils';
 import { getPlateById } from '../../database/plate/getPlateById';
 import { APIGatewayProxyEventHeaders } from 'aws-lambda';
 import jwt_decode from 'jwt-decode';
@@ -23,7 +28,7 @@ const getPlates = async (
     return corsSuccessResponse({ plate });
   } catch (error) {
     console.log(error);
-    return corsSuccessResponse({
+    return corsErrorResponse({
       error: 'Error getting plates',
     });
   }
